@@ -9,6 +9,9 @@ public static class ServiceCollectionExtension
     public static IServiceCollection AddCoreServices(this IServiceCollection services)
     {
         services.AddTransient<IClientService, ClientService>();
+        services.AddTransient<ICategorieService, CategorieService>();
+        services.AddTransient<INiveauService, NiveauService>();
+
         return services;
     }
 }
