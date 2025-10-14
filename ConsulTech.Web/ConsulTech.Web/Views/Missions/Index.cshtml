@@ -1,0 +1,78 @@
+﻿@model List<ConsulTech.Web.Models.ViewModels.Mission.MissionListVm>
+@{
+    ViewData["Title"] = "Missions";
+}
+<h1 class="mb-3">Missions</h1>
+
+@if (TempData["Error"] is string err && !string.IsNullOrWhiteSpace(err))
+{
+    <div class="alert alert-danger">@err</div>
+}
+
+@if (Model == null || !Model.Any())
+{
+    <div class="alert alert-info">
+        Aucune mission pour le moment.
+        <a class="btn btn-sm btn-primary ms-2" asp-controller="Missions" asp-action="Create">Créer une mission</a>
+    </div>
+}
+else
+{
+    <div class="table-responsive">
+        <table class="table table-striped align-middle">
+            <thead>
+                <tr>
+                    <th>Titre</th>
+                    <th>Client</th>
+                    <th>Début</th>
+                    <th>Fin</th>
+                    <th class="text-end">Budget</th>
+                    <th class="text-end">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var m in Model)
+                {
+                    <tr>
+                        <td>@m.Titre</td>
+                        <td>@m.ClientNom</td>
+                        <td>@m.Debut.ToShortDateString()</td>
+                        <td>@m.Fin.ToShortDateString()</td>
+                        <td class="text-end">@m.Budget.ToString("N2")</td>
+                        <td class="text-end">
+                            <a class="btn btn-sm btn-outline-secondary"
+                               asp-controller="Missions"
+                               asp-action="Edit"
+                               asp-route-id="@m.Id">
+                                Edit
+                            </a>
+
+                            <a class="btn btn-sm btn-outline-primary"
+                               asp-controller="Missions"
+                               asp-action="Details"
+                               asp-route-id="@m.Id">
+                                Details
+                            </a>
+
+                            <form asp-controller="Missions"
+                                  asp-action="Delete"
+                                  asp-route-id="@m.Id"
+                                  method="post"
+                                  class="d-inline">
+                                @Html.AntiForgeryToken()
+                                <button type="submit"
+                                        class="btn btn-sm btn-outline-danger"
+                                        onclick="return confirm('Supprimer cette mission ?')">
+                                    Delete
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+<p>
+    <a class="btn btn-primary" asp-controller="Missions" asp-action="Create">Nouvelle mission</a>
+</p>
