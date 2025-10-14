@@ -1,0 +1,70 @@
+﻿@model List<ConsulTech.Web.Models.ViewModels.ClientListVm>
+@{
+    ViewData["Title"] = "Clients";
+}
+<h1 class="mb-3">Clients</h1>
+
+@if (Model == null || !Model.Any())
+{
+    <div class="alert alert-info">Aucun client pour le moment.</div>
+}
+else
+{
+    <table class="table table-striped align-middle">
+        <thead>
+            <tr>
+                <th>Nom</th>
+                <th>Secteur</th>
+                <th>Adresse</th>
+                <th>Contact</th>
+                <th class="text-end">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var c in Model)
+            {
+                <tr>
+                    <td>@c.Nom</td>
+                    <td>@c.Secteur</td>
+                    <td>@c.Adresse</td>
+                    <td>@c.Contact</td>
+                    <td class="text-end">
+                        <!-- ✏️ Edit -->
+                        <a class="btn btn-sm btn-outline-secondary"
+                           asp-controller="Clients"
+                           asp-action="Edit"
+                           asp-route-id="@c.Id">
+                            Edit
+                        </a>
+
+                        <!-- 📄 Details -->
+                        <a class="btn btn-sm btn-outline-primary"
+                           asp-controller="Clients"
+                           asp-action="Details"
+                           asp-route-id="@c.Id">
+                            Details
+                        </a>
+
+                        <!-- 🗑️ Delete -->
+                        <form asp-controller="Clients"
+                              asp-action="Delete"
+                              asp-route-id="@c.Id"
+                              method="post"
+                              class="d-inline">
+                            @Html.AntiForgeryToken()
+                            <button type="submit"
+                                    class="btn btn-sm btn-outline-danger"
+                                    onclick="return confirm('Supprimer ?')">
+                                Delete
+                            </button>
+                        </form>
+                    </td>
+
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+<p>
+    <a class="btn btn-primary" asp-action="Create">Nouveau client</a>
+</p>
