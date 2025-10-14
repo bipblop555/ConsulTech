@@ -1,4 +1,5 @@
-﻿using ConsulTech.Web.Models.ViewModels.Categories;
+﻿using ConsulTech.Web.Models.Dtos.Categorie;
+using ConsulTech.Web.Models.ViewModels.Categories;
 using ConsulTech.Web.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -35,7 +36,10 @@ public class CategoriesController : Controller
         if (!ModelState.IsValid)
             return View(vm);
 
-        var dto = new CategoriesClient.CreateCategorieDto(vm.Titre);
+        var dto = new CreateCategorieDto()
+        {
+            Titre = vm.Titre
+        };
         await _clients.Create(dto);
 
         return RedirectToAction(nameof(Index));
@@ -66,7 +70,11 @@ public class CategoriesController : Controller
         if(!ModelState.IsValid)
             return View(vm);
 
-        await _clients.Update(new CategoriesClient.UpdateClientDto(id, vm.Titre));
+        await _clients.Update(new UpdateClientDto()
+        {
+            Id = id,
+            Titre = vm.Titre
+        });
 
         return RedirectToAction(nameof(Index));
     }

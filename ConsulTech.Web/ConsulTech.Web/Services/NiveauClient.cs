@@ -1,14 +1,12 @@
-﻿namespace ConsulTech.Web.Services;
+﻿using ConsulTech.Web.Models.Dtos.Niveau;
+
+namespace ConsulTech.Web.Services;
 
 public class NiveauClient
 {
     private readonly HttpClient _http;
 
     public NiveauClient(HttpClient httpClient) => _http = httpClient;
-
-    public record NiveauDto(Guid Id, string Titre);
-    public record CreateNiveauDto(string Titre);
-    public record UpdateNiveauDto(Guid Id, string Titre);
 
     public async Task<List<NiveauDto>> GetAll()
         => await _http.GetFromJsonAsync<List<NiveauDto>>("api/niveau") ?? new();

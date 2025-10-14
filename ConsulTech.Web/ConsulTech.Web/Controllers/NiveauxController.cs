@@ -1,4 +1,4 @@
-﻿using ConsulTech.Web.Models.ViewModels.Categories;
+﻿using ConsulTech.Web.Models.Dtos.Niveau;
 using ConsulTech.Web.Models.ViewModels.Niveaux;
 using ConsulTech.Web.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -36,7 +36,10 @@ public class NiveauxController : Controller
         if (!ModelState.IsValid)
             return View(vm);
 
-        var dto = new NiveauClient.CreateNiveauDto(vm.Titre);
+        var dto = new CreateNiveauDto()
+        {
+            Titre = vm.Titre
+        };
         await _clients.Create(dto);
 
         return RedirectToAction(nameof(Index));
@@ -67,7 +70,11 @@ public class NiveauxController : Controller
         if (!ModelState.IsValid)
             return View(vm);
 
-        await _clients.Update(new NiveauClient.UpdateNiveauDto(id, vm.Titre));
+        await _clients.Update(new UpdateNiveauDto()
+        {
+            Id = id,
+            Titre = vm.Titre
+        });
 
         return RedirectToAction(nameof(Index));
     }
