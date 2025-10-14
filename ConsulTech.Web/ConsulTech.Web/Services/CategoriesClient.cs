@@ -1,16 +1,12 @@
-﻿namespace ConsulTech.Web.Services;
+﻿using ConsulTech.Web.Models.Dtos.Categorie;
+
+namespace ConsulTech.Web.Services;
 
 public class CategoriesClient
 {
     private readonly HttpClient _http;
 
     public CategoriesClient(HttpClient httpClient) => _http = httpClient;
-
-    public record CategorieDto(Guid Id, string Titre);
-
-    public record CreateCategorieDto(string Titre);
-
-    public record UpdateClientDto(Guid Id, string Titre);
 
     public async Task<List<CategorieDto>> GetAll()
         => await _http.GetFromJsonAsync<List<CategorieDto>>("api/categorie") ?? new();

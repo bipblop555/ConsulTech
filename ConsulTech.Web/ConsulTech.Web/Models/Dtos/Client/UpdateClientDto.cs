@@ -1,6 +1,6 @@
 ﻿namespace ConsulTech.Web.Models.Dtos.Client;
 
-public record ClientDto
+public record UpdateClientDto
 {
     public Guid Id { get; set; }
     public string Nom { get; set; } = string.Empty;
