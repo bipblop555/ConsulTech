@@ -15,7 +15,7 @@ internal sealed class ClientService : IClientService
     }
     public async Task<Guid> CreateClientAsync(ClientDto clientDto)
     {
-        if (this._dbContext.Clients.Any(c => c.Nom == clientDto.Nom))
+        if (await this._dbContext.Clients.AnyAsync(c => c.Nom == clientDto.Nom))
             return Guid.Empty;
 
         var clientToAdd = new Client
