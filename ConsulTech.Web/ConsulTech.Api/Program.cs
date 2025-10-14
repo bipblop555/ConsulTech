@@ -1,4 +1,5 @@
 using ConsulTech.Core.Context;
+using ConsulTech.Core.Extensions;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,6 +11,7 @@ builder.Services.AddControllers();
 builder.Services.AddDbContext<ConsultTechContext>(
     options => options.UseSqlServer(builder.Configuration.GetConnectionString("ConsultTechDbContext")));
 builder.Services.AddOpenApi();
+builder.Services.AddCoreServices();
 
 var app = builder.Build();
 

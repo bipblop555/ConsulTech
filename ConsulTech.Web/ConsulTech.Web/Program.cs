@@ -6,7 +6,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 
 // API base URL
-var apiBase = new Uri("https://localhost:5001/");
+var apiBase = new Uri("https://localhost:7136");
 
 builder.Services.AddHttpClient<ClientsClient>(c => c.BaseAddress = apiBase);
 builder.Services.AddHttpClient<MissionsClient>(c => c.BaseAddress = apiBase);
