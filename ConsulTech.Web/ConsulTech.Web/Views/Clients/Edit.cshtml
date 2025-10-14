@@ -1,0 +1,39 @@
+﻿@model ConsulTech.Web.Models.ViewModels.ClientListVm
+@{
+    ViewData["Title"] = "Modifier client";
+    var id = (Guid)ViewBag.ClientId; // or use a hidden field bound another way
+}
+<h1 class="mb-3">Modifier client</h1>
+
+<form asp-action="Edit" asp-route-id="@id" method="post">
+    @Html.AntiForgeryToken()
+
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    <div class="mb-3">
+        <label asp-for="Nom" class="form-label"></label>
+        <input asp-for="Nom" class="form-control" />
+        <span asp-validation-for="Nom" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Secteur" class="form-label"></label>
+        <input asp-for="Secteur" class="form-control" />
+        <span asp-validation-for="Secteur" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Adresse" class="form-label"></label>
+        <input asp-for="Adresse" class="form-control" />
+        <span asp-validation-for="Adresse" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Contact" class="form-label"></label>
+        <input asp-for="Contact" class="form-control" />
+        <span asp-validation-for="Contact" class="text-danger"></span>
+    </div>
+
+    <button class="btn btn-primary">Enregistrer</button>
+    <a asp-action="Index" class="btn btn-secondary">Annuler</a>
+</form>
