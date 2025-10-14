@@ -9,4 +9,6 @@ public record CompetenceDto
     public string Titre { get; set; } = string.Empty;
     public CategorieDto Categorie { get; set; } = null!;
     public NiveauDto Niveau { get; set; } = null!;
+
+    public string Consultant { get; set; } = string.Empty;
 }
