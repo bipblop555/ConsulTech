@@ -38,13 +38,7 @@ namespace ConsulTech.Web.Controllers
             if (!ModelState.IsValid) return View(vm);
 
             var dto = new ClientsClient.CreateClientDto(vm.Nom, vm.Secteur, vm.Adresse, vm.Contact);
-            var created = await _clients.Create(dto);
-
-            if (created is null)
-            {
-                ModelState.AddModelError(string.Empty, "Échec de la création (API non disponible ?)");
-                return View(vm);
-            }
+            await _clients.Create(dto);
             return RedirectToAction(nameof(Index));
         }
 
@@ -73,14 +67,7 @@ namespace ConsulTech.Web.Controllers
         {
             if (!ModelState.IsValid) return View(vm);
 
-            var ok = await _clients.Update(
-                new ClientsClient.UpdateClientDto(id, vm.Nom, vm.Secteur, vm.Adresse, vm.Contact));
-
-            if (!ok)
-            {
-                ModelState.AddModelError(string.Empty, "Échec de la mise à jour (API indisponible ?)");
-                return View(vm);
-            }
+            await _clients.Update(new ClientsClient.UpdateClientDto(id, vm.Nom, vm.Secteur, vm.Adresse, vm.Contact));
 
             return RedirectToAction(nameof(Index));
         }
