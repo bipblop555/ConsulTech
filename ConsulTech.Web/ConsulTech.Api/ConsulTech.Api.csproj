@@ -18,4 +18,8 @@
     <ProjectReference Include="..\ConsulTech.Core\ConsulTech.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\ConsulTech.Core\ConsulTech.Core.csproj" />
+  </ItemGroup>
+
 </Project>
