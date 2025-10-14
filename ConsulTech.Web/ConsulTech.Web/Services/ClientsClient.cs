@@ -16,17 +16,16 @@
 
         public Task<ClientDto?> Get(Guid id)
             => _http.GetFromJsonAsync<ClientDto?>($"api/client/{id}");
-        public async Task<ClientDto?> Create(CreateClientDto dto)
+        public async Task Create(CreateClientDto dto)
         {
             var res = await _http.PostAsJsonAsync("api/client", dto);
-            if (!res.IsSuccessStatusCode) return null;
-            return await res.Content.ReadFromJsonAsync<ClientDto>();
+            res.EnsureSuccessStatusCode();
         }
 
-        public async Task<bool> Update(UpdateClientDto dto)
+        public async Task Update(UpdateClientDto dto)
         {
             var res = await _http.PutAsJsonAsync($"api/client/{dto.Id}", dto);
-            return res.IsSuccessStatusCode;
+            res.EnsureSuccessStatusCode();
         }
 
         public async Task<bool> Delete(Guid id)
