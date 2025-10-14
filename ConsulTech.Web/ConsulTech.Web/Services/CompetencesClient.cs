@@ -1,8 +1,9 @@
-﻿namespace ConsulTech.Web.Services
+﻿namespace ConsulTech.Web.Services;
+
+public class CompetencesClient
 {
-    public class CompetencesClient
-    {
-        private readonly HttpClient _http;
-        public CompetencesClient(HttpClient http) => _http = http;
-    }
+    private readonly HttpClient _http;
+    public CompetencesClient(HttpClient http) => _http = http;
+
+
 }
