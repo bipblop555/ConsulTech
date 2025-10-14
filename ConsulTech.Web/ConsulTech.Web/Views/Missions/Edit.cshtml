@@ -1,0 +1,61 @@
+﻿@model ConsulTech.Web.Models.ViewModels.Mission.MissionEditVm
+@{
+    ViewData["Title"] = "Modifier la mission";
+    var id = (Guid)ViewBag.MissionId;
+}
+<h1 class="mb-3">Modifier la mission</h1>
+
+<form asp-action="Edit" asp-route-id="@id" method="post">
+    @Html.AntiForgeryToken()
+
+    <div class="mb-3">
+        <label asp-for="Titre" class="form-label"></label>
+        <input asp-for="Titre" class="form-control" />
+        <span asp-validation-for="Titre" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Description" class="form-label"></label>
+        <textarea asp-for="Description" class="form-control" rows="3"></textarea>
+        <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+
+    <div class="row g-3">
+        <div class="col-md-4">
+            <label asp-for="Debut" class="form-label"></label>
+            <input asp-for="Debut" type="date" class="form-control" />
+            <span asp-validation-for="Debut" class="text-danger"></span>
+        </div>
+        <div class="col-md-4">
+            <label asp-for="Fin" class="form-label"></label>
+            <input asp-for="Fin" type="date" class="form-control" />
+            <span asp-validation-for="Fin" class="text-danger"></span>
+        </div>
+        <div class="col-md-4">
+            <label asp-for="Budget" class="form-label"></label>
+            <input asp-for="Budget" class="form-control" />
+            <span asp-validation-for="Budget" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="mb-3 mt-3">
+        <label class="form-label">Client</label>
+        <select asp-for="ClientId" class="form-select">
+            <option value="">-- Sélectionner un client --</option>
+            @foreach (var opt in Model.ClientOptions)
+            {
+                <option value="@opt.Value" selected="@(opt.Value == Model.ClientId.ToString() ? "selected" : null)">
+                    @opt.Label
+                </option>
+            }
+        </select>
+        <span asp-validation-for="ClientId" class="text-danger"></span>
+    </div>
+
+    <button class="btn btn-primary">Enregistrer</button>
+    <a class="btn btn-secondary" asp-action="Index">Annuler</a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
