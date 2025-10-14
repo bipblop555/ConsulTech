@@ -1,0 +1,14 @@
+﻿using ConsulTech.Core.Services;
+using ConsulTech.Core.Services.Abstractions;
+using Microsoft.Extensions.DependencyInjection;
+
+namespace ConsulTech.Core.Extensions;
+
+public static class ServiceCollectionExtension
+{
+    public static IServiceCollection AddCoreServices(this IServiceCollection services)
+    {
+        services.AddTransient<IClientService, ClientService>();
+        return services;
+    }
+}
