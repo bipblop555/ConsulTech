@@ -1,23 +1,19 @@
-﻿@using ConsulTech.Web.Models.ViewModels.Client
-@model List<ClientListVm>
+﻿@model List<ConsulTech.Web.Models.ViewModels.Niveaux.NiveauxListVm>
 @{
-    ViewData["Title"] = "Clients";
+    ViewData["Title"] = "Niveaux";
 }
-<h1 class="mb-3">Clients</h1>
+<h1 class="mb-3">Niveaux</h1>
 
 @if (Model == null || !Model.Any())
 {
-    <div class="alert alert-info">Aucun client pour le moment.</div>
+    <div class="alert alert-info">Aucun niveau pour le moment.</div>
 }
 else
 {
     <table class="table table-striped align-middle">
         <thead>
             <tr>
-                <th>Nom</th>
-                <th>Secteur</th>
-                <th>Adresse</th>
-                <th>Contact</th>
+                <th>Titre</th>
                 <th class="text-end">Actions</th>
             </tr>
         </thead>
@@ -25,14 +21,11 @@ else
             @foreach (var c in Model)
             {
                 <tr>
-                    <td>@c.Nom</td>
-                    <td>@c.Secteur</td>
-                    <td>@c.Adresse</td>
-                    <td>@c.Contact</td>
+                    <td>@c.Titre</td>
                     <td class="text-end">
                         <!-- ✏️ Edit -->
                         <a class="btn btn-sm btn-outline-secondary"
-                           asp-controller="Clients"
+                           asp-controller="Niveaux"
                            asp-action="Edit"
                            asp-route-id="@c.Id">
                             Edit
@@ -40,14 +33,14 @@ else
 
                         <!-- 📄 Details -->
                         <a class="btn btn-sm btn-outline-primary"
-                           asp-controller="Clients"
+                           asp-controller="Niveaux"
                            asp-action="Details"
                            asp-route-id="@c.Id">
                             Details
                         </a>
 
                         <!-- 🗑️ Delete -->
-                        <form asp-controller="Clients"
+                        <form asp-controller="Niveaux"
                               asp-action="Delete"
                               asp-route-id="@c.Id"
                               method="post"
@@ -67,5 +60,5 @@ else
     </table>
 }
 <p>
-    <a class="btn btn-primary" asp-action="Create">Nouveau client</a>
+    <a class="btn btn-primary" asp-action="Create">Nouveau niveau</a>
 </p>

@@ -1,6 +1,6 @@
-﻿using ConsulTech.Web.Models.ViewModels;
+﻿using ConsulTech.Web.Models.Dtos.Client;
+using ConsulTech.Web.Models.ViewModels.Client;
 using ConsulTech.Web.Services;
-using Humanizer;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ConsulTech.Web.Controllers
@@ -37,7 +37,13 @@ namespace ConsulTech.Web.Controllers
         {
             if (!ModelState.IsValid) return View(vm);
 
-            var dto = new ClientsClient.CreateClientDto(vm.Nom, vm.Secteur, vm.Adresse, vm.Contact);
+            var dto = new CreateClientDto()
+            {
+                Nom = vm.Nom,
+                Secteur = vm.Secteur,
+                Adresse = vm.Adresse,
+                Contact = vm.Contact
+            };
             await _clients.Create(dto);
             return RedirectToAction(nameof(Index));
         }
@@ -67,7 +73,14 @@ namespace ConsulTech.Web.Controllers
         {
             if (!ModelState.IsValid) return View(vm);
 
-            await _clients.Update(new ClientsClient.UpdateClientDto(id, vm.Nom, vm.Secteur, vm.Adresse, vm.Contact));
+            await _clients.Update(new UpdateClientDto()
+            {
+                Id = id,
+                Nom = vm.Nom,
+                Secteur = vm.Secteur,
+                Adresse = vm.Adresse,
+                Contact = vm.Contact
+            });
 
             return RedirectToAction(nameof(Index));
         }
