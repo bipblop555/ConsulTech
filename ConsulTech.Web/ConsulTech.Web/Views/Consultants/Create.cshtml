@@ -1,0 +1,48 @@
+﻿@model ConsulTech.Web.Models.ViewModels.Consultant.ConsultantEditVm
+@{
+    ViewData["Title"] = "Nouveau consultant";
+}
+<h1 class="mb-3">Nouveau consultant</h1>
+
+<form asp-action="Create" method="post">
+    @Html.AntiForgeryToken()
+
+    <div class="mb-3">
+        <label asp-for="Nom" class="form-label"></label>
+        <input asp-for="Nom" class="form-control" />
+        <span asp-validation-for="Nom" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Prenom" class="form-label"></label>
+        <input asp-for="Prenom" class="form-control" />
+        <span asp-validation-for="Prenom" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Email" class="form-label"></label>
+        <input asp-for="Email" class="form-control" />
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+
+    <div class="row g-3">
+        <div class="col-md-6">
+            <label asp-for="DateEmbauche" class="form-label"></label>
+            <input asp-for="DateEmbauche" type="date" class="form-control" />
+            <span asp-validation-for="DateEmbauche" class="text-danger"></span>
+        </div>
+        <div class="col-md-6 d-flex align-items-center">
+            <div class="form-check mt-4">
+                <input asp-for="EstDisponible" class="form-check-input" />
+                <label asp-for="EstDisponible" class="form-check-label"></label>
+            </div>
+        </div>
+    </div>
+
+    <button class="btn btn-primary mt-3">Enregistrer</button>
+    <a class="btn btn-secondary mt-3" asp-action="Index">Annuler</a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

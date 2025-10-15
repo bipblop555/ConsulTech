@@ -10,7 +10,7 @@ var apiBase = new Uri("https://localhost:7136");
 
 builder.Services.AddHttpClient<ClientsClient>(c => c.BaseAddress = apiBase);
 builder.Services.AddHttpClient<MissionsClient>(c => c.BaseAddress = apiBase);
-//builder.Services.AddHttpClient<ConsultantsClient>(c => c.BaseAddress = apiBase);
+builder.Services.AddHttpClient<ConsultantsClient>(c => c.BaseAddress = apiBase);
 //builder.Services.AddHttpClient<CompetencesClient>(c => c.BaseAddress = apiBase);
 
 
