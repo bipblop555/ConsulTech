@@ -1,4 +1,5 @@
-﻿using ConsulTech.Web.Models.ViewModels.Consultant;
+﻿using ConsulTech.Web.Models.Dtos.Consultant;
+using ConsulTech.Web.Models.ViewModels.Consultant;
 using ConsulTech.Web.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -38,8 +39,14 @@ namespace ConsulTech.Web.Controllers
         {
             if (!ModelState.IsValid) return View(vm);
 
-            var ok = await _consultants.Create(new ConsultantsClient.CreateConsultantDto(
-                vm.Nom, vm.Prenom, vm.Email, vm.DateEmbauche, vm.EstDisponible));
+            var ok = await _consultants.Create(new CreateConsultantDto()
+            {
+                Nom = vm.Nom,
+                Prenom = vm.Prenom,
+                Email = vm.Email,
+                DateEmbauche = vm.DateEmbauche,
+                EstDisponible = vm.EstDisponible
+            });
 
             if (!ok)
             {
@@ -75,8 +82,15 @@ namespace ConsulTech.Web.Controllers
         {
             if (!ModelState.IsValid) return View(vm);
 
-            var ok = await _consultants.Update(new ConsultantsClient.UpdateConsultantDto(
-                id, vm.Nom, vm.Prenom, vm.Email, vm.DateEmbauche, vm.EstDisponible));
+            var ok = await _consultants.Update(new UpdateConsultantDto
+            {
+                Id = id,
+                Nom = vm.Nom,
+                Prenom = vm.Prenom,
+                Email = vm.Email,
+                DateEmbauche = vm.DateEmbauche,
+                EstDisponible = vm.EstDisponible
+            });
 
             if (!ok)
             {

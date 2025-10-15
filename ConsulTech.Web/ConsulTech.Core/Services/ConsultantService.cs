@@ -66,11 +66,25 @@ public sealed class ConsultantService : IConsultantService
             .ToListAsync();
     }
 
-    public Task<Consultant> GetConsultantByIdAsync(Guid id)
+    public Task<ConsultantDto> GetConsultantByIdAsync(Guid id)
     {
         return this._dbContext.Consultants
             .Include(c => c.Competences)
             .Include(c => c.Missions)
+            .Select(c => new ConsultantDto
+            {
+                Id = c.Id,
+                Nom = c.Nom,
+                Prenom = c.Prenom,
+                Email = c.Email,
+                DateEmbauche = c.DateEmbauche,
+                EstDisponible = c.EstDisponible,
+
+                Competences = new List<CompetenceListDto>(c.Competences.Select(k => new CompetenceListDto(
+                    k.Id,
+                    k.Titre
+                )))
+            })
             .FirstOrDefaultAsync(c => c.Id == id)!;
     }
 
