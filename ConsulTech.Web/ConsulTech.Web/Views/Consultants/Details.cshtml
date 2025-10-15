@@ -1,0 +1,22 @@
+﻿@model ConsulTech.Web.Models.ViewModels.Consultant.ConsultantListVm
+@{
+    ViewData["Title"] = "Détails du consultant";
+}
+<h1 class="mb-3">Détails du consultant</h1>
+
+<div class="card">
+    <div class="card-body">
+        <h4 class="card-title">@Model.Prenom @Model.Nom</h4>
+        <dl class="row">
+            <dt class="col-sm-3">Email</dt>
+            <dd class="col-sm-9">@Model.Email</dd>
+            <dt class="col-sm-3">Embauche</dt>
+            <dd class="col-sm-9">@Model.DateEmbauche.ToShortDateString()</dd>
+            <dt class="col-sm-3">Disponible</dt>
+            <dd class="col-sm-9">@(Model.EstDisponible ? "Oui" : "Non")</dd>
+            <dt class="col-sm-3">Compétences</dt>
+            <dd class="col-sm-9">@string.Join(", ", Model.Competences)</dd>
+        </dl>
+        <a class="btn btn-secondary" asp-action="Index">Retour</a>
+    </div>
+</div>

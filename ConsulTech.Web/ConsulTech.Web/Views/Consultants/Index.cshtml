@@ -1,0 +1,85 @@
+﻿@model List<ConsulTech.Web.Models.ViewModels.Consultant.ConsultantListVm>
+@{
+    ViewData["Title"] = "Consultants";
+}
+<h1 class="mb-3">Consultants</h1>
+
+@if (TempData["Error"] is string err && !string.IsNullOrWhiteSpace(err))
+{
+    <div class="alert alert-danger">@err</div>
+}
+
+@if (Model == null || !Model.Any())
+{
+    <div class="alert alert-info">
+        Aucun consultant pour le moment.
+        <a class="btn btn-sm btn-primary ms-2" asp-controller="Consultants" asp-action="Create">
+            Nouveau consultant
+        </a>
+    </div>
+}
+else
+{
+    <div class="table-responsive">
+        <table class="table table-striped align-middle">
+            <thead>
+                <tr>
+                    <th>Nom</th>
+                    <th>Prénom</th>
+                    <th>Email</th>
+                    <th>Embauche</th>
+                    <th>Dispo</th>
+                    <th>Compétences</th>
+                    <th class="text-end">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var c in Model)
+                {
+                    <tr>
+                        <td>@c.Nom</td>
+                        <td>@c.Prenom</td>
+                        <td>@c.Email</td>
+                        <td>@c.DateEmbauche.ToShortDateString()</td>
+                        <td>@(c.EstDisponible ? "✅" : "⛔")</td>
+                        <td>@string.Join(", ", c.Competences)</td>
+                        <td class="text-end">
+                            <a class="btn btn-sm btn-outline-secondary"
+                               asp-controller="Consultants"
+                               asp-action="Edit"
+                               asp-route-id="@c.Id">
+                                Edit
+                            </a>
+
+                            <a class="btn btn-sm btn-outline-primary"
+                               asp-controller="Consultants"
+                               asp-action="Details"
+                               asp-route-id="@c.Id">
+                                Details
+                            </a>
+
+                            <form asp-controller="Consultants"
+                                  asp-action="Delete"
+                                  asp-route-id="@c.Id"
+                                  method="post"
+                                  class="d-inline">
+                                @Html.AntiForgeryToken()
+                                <button type="submit"
+                                        class="btn btn-sm btn-outline-danger"
+                                        onclick="return confirm('Supprimer ce consultant ?')">
+                                    Delete
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <p>
+        <a class="btn btn-primary" asp-controller="Consultants" asp-action="Create">
+            Nouveau consultant
+        </a>
+    </p>
+}
