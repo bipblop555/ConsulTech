@@ -1,0 +1,50 @@
+﻿@model ConsulTech.Web.Models.ViewModels.Competence.CompetenceEditViewModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>CompetenceEditViewModel</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Id" class="control-label"></label>
+                <input asp-for="Id" class="form-control" />
+                <span asp-validation-for="Id" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Titre" class="control-label"></label>
+                <input asp-for="Titre" class="form-control" />
+                <span asp-validation-for="Titre" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CategorieId" class="control-label"></label>
+                <input asp-for="CategorieId" class="form-control" />
+                <span asp-validation-for="CategorieId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="NiveauId" class="control-label"></label>
+                <input asp-for="NiveauId" class="form-control" />
+                <span asp-validation-for="NiveauId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ConsultantsId" class="control-label"></label>
+                <input asp-for="ConsultantsId" class="form-control" />
+                <span asp-validation-for="ConsultantsId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+

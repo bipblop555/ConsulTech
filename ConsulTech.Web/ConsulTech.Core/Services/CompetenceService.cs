@@ -14,11 +14,21 @@ internal sealed class CompetenceService : ICompetenceService
 
     public async Task<Guid> CreateCompetenceAsync(CompetenceDto competenceDto)
     {
+
+        var matchingCategorie = await this._dbContext.Categories
+            .FirstOrDefaultAsync(c => c.Titre == competenceDto.Titre);
+
+        var matchingNiveau = await this._dbContext.Niveaux
+            .FirstOrDefaultAsync(n => n.Id == competenceDto.NiveauId);
+
+        if(matchingCategorie is null || matchingNiveau is null)
+            return Guid.Empty;
+
         var competenceToAdd = new Competence
         {
             Titre = competenceDto.Titre,
-            Niveau = competenceDto.Niveau,
-            Categorie = competenceDto.Categorie
+            Niveau = matchingNiveau,
+            Categorie = matchingCategorie
         };
 
         await this._dbContext.Competences.AddAsync(competenceToAdd);
@@ -67,8 +77,8 @@ internal sealed class CompetenceService : ICompetenceService
             return Guid.Empty;
 
         foundCompetence!.Titre = competenceDto.Titre;
-        foundCompetence.Categorie = competenceDto.Categorie;
-        foundCompetence.Niveau = competenceDto.Niveau;
+        foundCompetence.Categorie.Id = competenceDto.CategorieId;
+        foundCompetence.Niveau.Id = competenceDto.NiveauId;
         foundCompetence.Consultants = await this._dbContext.Consultants
             .Where(con => con.Competences.Any(comp => comp.Id == competenceDto.Id))
             .ToListAsync();

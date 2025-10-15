@@ -11,13 +11,4 @@ public class CompetenceBaseViewModel
 
     public string Consultant { get; set; } = string.Empty;
 
-    public static CompetenceBaseViewModel FromDto(CompetenceDto dto) =>
-        new CompetenceBaseViewModel
-        {
-            Id = dto.Id,
-            Titre = dto.Titre,
-            Categorie = dto.Categorie.Titre,
-            Niveau = dto.Niveau.Titre,
-            Consultant = dto.Consultant
-        };
 }

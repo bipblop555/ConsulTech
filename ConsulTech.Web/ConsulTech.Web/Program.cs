@@ -15,7 +15,6 @@ builder.Services.AddHttpClient<CategoriesClient>(c => c.BaseAddress = apiBase);
 builder.Services.AddHttpClient<NiveauClient>(c => c.BaseAddress = apiBase);
 builder.Services.AddHttpClient<CompetencesClient>(c => c.BaseAddress = apiBase);
 
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

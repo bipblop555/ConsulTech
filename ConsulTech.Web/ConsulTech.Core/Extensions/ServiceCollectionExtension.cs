@@ -12,6 +12,7 @@ public static class ServiceCollectionExtension
         services.AddTransient<ICategorieService, CategorieService>();
         services.AddTransient<INiveauService, NiveauService>();
         services.AddTransient<IConsultantService, ConsultantService>();
+        services.AddTransient<ICompetenceService, CompetenceService>();
 
         return services;
     }

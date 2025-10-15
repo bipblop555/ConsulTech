@@ -16,12 +16,19 @@ public class CompetenceEditViewModel
     
     [ValidateNever]
     [DisplayName("Catégorie")]
-    public Guid CategorieId { get; set; }
+    public List<Guid> CategorieId { get; set; } = null!;
 
     [ValidateNever]
     public List<SelectListItem> Niveaux { get; set; } = new();
 
     [ValidateNever]
     [DisplayName("Niveau")]
-    public Guid NiveauId { get; set; }
+    public List<Guid> NiveauId { get; set; } = null!;
+
+    [ValidateNever]
+    public List<SelectListItem> Consultants { get; set; } = new();
+
+    [ValidateNever]
+    [DisplayName("Consultant")]
+    public List<Guid> ConsultantsId { get; set; } = null!;
 }

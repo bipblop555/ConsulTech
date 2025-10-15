@@ -10,5 +10,5 @@ public record CompetenceDto
     public CategorieDto Categorie { get; set; } = null!;
     public NiveauDto Niveau { get; set; } = null!;
 
-    public string Consultant { get; set; } = string.Empty;
+    public Services.ConsultantsClient.ConsultantDto Consultant { get; set; } = null!;
 }
