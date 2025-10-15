@@ -6,11 +6,16 @@ namespace ConsulTech.Web.Models.Dtos.Competence;
 public record CompetenceDto
 {
     public Guid Id { get; set; }
+
     public string Titre { get; set; } = string.Empty;
-    public CategorieDto Categorie { get; set; } = null!;
-    public NiveauDto Niveau { get; set; } = null!;
 
-    public List<Services.ConsultantsClient.ConsultantDto> Consultant { get; set; } = null!;
+    public string CategorieName { get; set; } = string.Empty;
 
-    public List<string> ConsultantsName { get; set; } = null!;
+    public string NiveauName { get; set; } = string.Empty;
+
+    public Guid CategorieId { get; set; }
+
+    public Guid NiveauId { get; set; }
+
+    public Guid ConsultantsId { get; set; }
 }

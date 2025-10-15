@@ -35,3 +35,4 @@ public class CompetenceEditViewModel
     [ValidateNever]
     public List<SelectListItem> Consultants { get; set; } = new();
 }
+

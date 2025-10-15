@@ -101,7 +101,7 @@ namespace ConsulTech.Web.Controllers
                 Email = c.Email,
                 DateEmbauche = c.DateEmbauche,
                 EstDisponible = c.EstDisponible,
-                Competences = c.Competences?.Select(k => k.Titre).ToList() ?? new()
+                Competences = c.Competences.Select(k => k.Titre).ToList() ?? new()
             };
             return View(vm);
         }

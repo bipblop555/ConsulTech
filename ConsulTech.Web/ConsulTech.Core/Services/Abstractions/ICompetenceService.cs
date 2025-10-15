@@ -11,7 +11,7 @@ namespace ConsulTech.Core.Services.Abstractions
     public interface ICompetenceService
     {
         Task<List<CompetenceDto>> GetAllCompetencesAsync();
-        Task<Competence?> GetCompetenceByIdAsync(Guid id);
+        Task<CompetenceDto?> GetCompetenceByIdAsync(Guid id);
         Task<Guid> CreateCompetenceAsync(CompetenceDto competenceDto);
         Task<Guid> UpdateCompetenceAsync(CompetenceDto competenceDto);
         Task<bool> DeleteCompetenceAsync(Guid id);

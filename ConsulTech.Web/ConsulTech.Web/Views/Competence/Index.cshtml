@@ -17,7 +17,6 @@ else
                 <th>Titre</th>
                 <th>Categorie</th>
                 <th>Niveau</th>
-                <th>Consultant</th>
                 <th class="text-end">Actions</th>
             </tr>
         </thead>
@@ -28,11 +27,10 @@ else
                     <td>@c.Titre</td>
                     <td>@c.Categorie</td>
                     <td>@c.Niveau</td>
-                    <td>@c.Consultant</td>
                     <td class="text-end">
                         <!-- ✏️ Edit -->
                         <a class="btn btn-sm btn-outline-secondary"
-                           asp-controller="Clients"
+                           asp-controller="Competence"
                            asp-action="Edit"
                            asp-route-id="@c.Id">
                             Edit
@@ -40,14 +38,14 @@ else
 
                         <!-- 📄 Details -->
                         <a class="btn btn-sm btn-outline-primary"
-                           asp-controller="Clients"
+                           asp-controller="Competence"
                            asp-action="Details"
                            asp-route-id="@c.Id">
                             Details
                         </a>
 
                         <!-- 🗑️ Delete -->
-                        <form asp-controller="Clients"
+                        <form asp-controller="Competence"
                               asp-action="Delete"
                               asp-route-id="@c.Id"
                               method="post"
@@ -67,5 +65,5 @@ else
     </table>
 }
 <p>
-    <a class="btn btn-primary" asp-action="Create">Nouvelle compétence</a>
+    <a class="btn btn-primary" asp-controller="Competence" asp-action="Create">Nouvelle compétence</a>
 </p>

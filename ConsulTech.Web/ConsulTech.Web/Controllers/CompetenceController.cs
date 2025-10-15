@@ -31,15 +31,14 @@ public class CompetenceController : Controller
     // GET: CompetenceController
     public async Task<ActionResult> Index()
     {
-        var dtos = await _clients.GetAll();
+        List<CompetenceDto>? dtos = await _clients.GetAll();
 
-        var vm = dtos.Select(c => new CompetenceBaseViewModel
+        List<CompetenceBaseViewModel>? vm = dtos.Select(c => new CompetenceBaseViewModel
         {
             Id = c.Id,
             Titre = c.Titre,
-            Categorie = c.Categorie.Titre,
-            Niveau = c.Niveau.Titre,
-            Consultant = c.Consultant.Select(c => c.Nom).FirstOrDefault() ?? "Aucun"
+            Categorie = c.CategorieName,
+            Niveau = c.NiveauName
         }).ToList();
         return View(vm);
     }
@@ -54,9 +53,8 @@ public class CompetenceController : Controller
         {
             Id = competence.Id,
             Titre = competence.Titre,
-            Categorie = competence.Categorie.Titre,
-            Niveau = competence.Niveau.Titre,
-            Consultant = competence.Consultant.Select(c => c.Nom).FirstOrDefault() ?? "Aucun"
+            Categorie = competence.CategorieName,
+            Niveau = competence.NiveauName,
         };
         return View(vm);
     }
@@ -103,9 +101,8 @@ public class CompetenceController : Controller
         {
             Id = compFromApi.Id,
             Titre = compFromApi.Titre,
-            CategorieId = compFromApi.Categorie.Id,
-            NiveauId = compFromApi.Niveau.Id,
-            ConsultantId = compFromApi.Consultant.Select(c => c.Id).FirstOrDefault()
+            CategorieId = compFromApi.CategorieId,
+            NiveauId = compFromApi.NiveauId,
         };
 
         vm = await PopulateListAsync(vm);
@@ -160,7 +157,7 @@ public class CompetenceController : Controller
                 .ToList();
         }
 
-        var consultantFromApi = await _consultants.GetAll();
+        List<ConsultantsClient.ConsultantDto>? consultantFromApi = await _consultants.GetAll();
         if (consultantFromApi is not null)
         {
             vm.Consultants = consultantFromApi

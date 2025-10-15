@@ -60,18 +60,31 @@ internal sealed class CompetenceService : ICompetenceService
                 Id = comp.Id,
                 Titre = comp.Titre,
                 CategorieName = comp.Categorie.Titre,
-                NiveauName = comp.Niveau.Titre
+                NiveauName = comp.Niveau.Titre,
+                CategorieId = comp.Categorie.Id,
+                NiveauId = comp.Niveau.Id,
+                ConsultantsId = comp.Consultants.FirstOrDefault() != null ? comp.Consultants.First().Id : Guid.Empty
             })
             .ToListAsync();
     }
 
-    public async Task<Competence?> GetCompetenceByIdAsync(Guid id)
+    public async Task<CompetenceDto> GetCompetenceByIdAsync(Guid id)
     {
         return await this._dbContext.Competences
             .Include(c => c.Categorie)
             .Include(c => c.Niveau)
             .Include(c => c.Consultants)
-            .FirstOrDefaultAsync(c => c.Id == id);
+            .Select(comp => new CompetenceDto
+            {
+                Id = comp.Id,
+                Titre = comp.Titre,
+                CategorieName = comp.Categorie.Titre,
+                NiveauName = comp.Niveau.Titre,
+                CategorieId = comp.Categorie.Id,
+                NiveauId = comp.Niveau.Id,
+                ConsultantsId = comp.Consultants.FirstOrDefault() != null ? comp.Consultants.First().Id : Guid.Empty
+            })
+            .FirstOrDefaultAsync(c => c.Id == id) ?? new();
     }
 
     public async Task<Guid> UpdateCompetenceAsync(CompetenceDto competenceDto)
