@@ -16,7 +16,9 @@ public class CompetenceController : ControllerBase
     [HttpGet]
     public async Task<ActionResult> GetAllCompetencesAsync()
     {
-        return Ok(await this._competenceService.GetAllCompetencesAsync());
+
+        var t = await this._competenceService.GetAllCompetencesAsync();
+        return Ok(t);
     }
 
     [HttpGet("{id:Guid}")]
@@ -34,7 +36,7 @@ public class CompetenceController : ControllerBase
             Titre = competence.Titre,
             CategorieId = competence.CategorieId,
             NiveauId = competence.NiveauId,
-            ConsultantsId = competence.ConsultantsId
+            ConsultantsId = competence.ConsultantsId.FirstOrDefault() // Assuming single consultant for creation
         };
 
         var createdCompetenceId = await _competenceService.CreateCompetenceAsync(competenceDto);
@@ -56,7 +58,7 @@ public class CompetenceController : ControllerBase
             Titre = competence.Titre,
             CategorieId = competence.CategorieId,
             NiveauId = competence.NiveauId,
-            ConsultantsId = competence.ConsultantsId
+            ConsultantsId = competence.ConsultantsId.FirstOrDefault() // Assuming single consultant for update
         };
         var updatedCompetenceId = await _competenceService.UpdateCompetenceAsync(competenceDto);
         if (updatedCompetenceId != Guid.Empty)

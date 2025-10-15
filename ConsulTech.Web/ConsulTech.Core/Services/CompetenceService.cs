@@ -15,26 +15,25 @@ internal sealed class CompetenceService : ICompetenceService
     public async Task<Guid> CreateCompetenceAsync(CompetenceDto competenceDto)
     {
 
-        var matchingCategorie = await this._dbContext.Categories
-            .FirstOrDefaultAsync(c => c.Titre == competenceDto.Titre);
+        var categorie = await _dbContext.Categories.FindAsync(competenceDto.CategorieId);
+        var niveau = await _dbContext.Niveaux.FindAsync(competenceDto.NiveauId);
+        var consultant = await _dbContext.Consultants.FindAsync(competenceDto.ConsultantsId);
 
-        var matchingNiveau = await this._dbContext.Niveaux
-            .FirstOrDefaultAsync(n => n.Id == competenceDto.NiveauId);
-
-        if(matchingCategorie is null || matchingNiveau is null)
+        if (categorie is null || niveau is null || consultant is null)
             return Guid.Empty;
 
-        var competenceToAdd = new Competence
+        var competence = new Competence
         {
             Titre = competenceDto.Titre,
-            Niveau = matchingNiveau,
-            Categorie = matchingCategorie
+            Categorie = categorie,
+            Niveau = niveau,
+            Consultants = new List<Consultant>() { consultant }
         };
 
-        await this._dbContext.Competences.AddAsync(competenceToAdd);
-        await this._dbContext.SaveChangesAsync();
+        _dbContext.Competences.Add(competence);
+        await _dbContext.SaveChangesAsync();
 
-        return competenceToAdd.Id;
+        return competence.Id;
     }
 
     public async Task<bool> DeleteCompetenceAsync(Guid id)
@@ -48,12 +47,21 @@ internal sealed class CompetenceService : ICompetenceService
         return true;
     }
 
-    public async Task<List<Competence>> GetAllCompetencesAsync()
+    public async Task<List<CompetenceDto>> GetAllCompetencesAsync()
     {
+        // retourner la liste de compétence dto 
+        // convertir en DTO
         return await this._dbContext.Competences
-            .Include(c => c.Categorie)
+            .Include(cat => cat.Categorie)
             .Include(c => c.Niveau)
-            .Include(c => c.Consultants)
+            .Include(consultant => consultant.Consultants)
+            .Select(comp => new CompetenceDto
+            {
+                Id = comp.Id,
+                Titre = comp.Titre,
+                CategorieName = comp.Categorie.Titre,
+                NiveauName = comp.Niveau.Titre
+            })
             .ToListAsync();
     }
 

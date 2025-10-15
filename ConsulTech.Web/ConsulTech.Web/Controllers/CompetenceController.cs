@@ -39,7 +39,7 @@ public class CompetenceController : Controller
             Titre = c.Titre,
             Categorie = c.Categorie.Titre,
             Niveau = c.Niveau.Titre,
-            Consultant = c.Consultant.Nom
+            Consultant = c.Consultant.Select(c => c.Nom).FirstOrDefault() ?? "Aucun"
         }).ToList();
         return View(vm);
     }
@@ -56,7 +56,7 @@ public class CompetenceController : Controller
             Titre = competence.Titre,
             Categorie = competence.Categorie.Titre,
             Niveau = competence.Niveau.Titre,
-            Consultant = competence.Consultant.Nom
+            Consultant = competence.Consultant.Select(c => c.Nom).FirstOrDefault() ?? "Aucun"
         };
         return View(vm);
     }
@@ -80,12 +80,12 @@ public class CompetenceController : Controller
             return View(vm);
         }
 
-        var dto = new CreateCompetenceDto()
+        var dto = new CreateCompetenceDto
         {
             Titre = vm.Titre,
             CategorieId = vm.CategorieId,
             NiveauId = vm.NiveauId,
-            ConsultantId = vm.ConsultantsId
+            ConsultantsId = new List<Guid> { vm.ConsultantId }
         };
 
         await _clients.Create(dto);
@@ -95,7 +95,7 @@ public class CompetenceController : Controller
     // GET: CompetenceController/Edit/5
     public async Task<ActionResult> Edit(Guid id)
     {
-        var compFromApi = await _clients.Get(id);
+        CompetenceDto? compFromApi = await _clients.Get(id);
         if (compFromApi is null)
             return NotFound();
 
@@ -105,13 +105,12 @@ public class CompetenceController : Controller
             Titre = compFromApi.Titre,
             CategorieId = compFromApi.Categorie.Id,
             NiveauId = compFromApi.Niveau.Id,
-            ConsultantsId = compFromApi.Consultant.Id
+            ConsultantId = compFromApi.Consultant.Select(c => c.Id).FirstOrDefault()
         };
 
         vm = await PopulateListAsync(vm);
 
         return View(vm);
-        return View()
     }
 
     // POST: CompetenceController/Edit/5
@@ -129,7 +128,7 @@ public class CompetenceController : Controller
             Titre = vm.Titre,
             CategorieId = vm.CategorieId,
             NiveauId = vm.NiveauId,
-            ConsultantId = vm.ConsultantsId
+            ConsultantsId = new List<Guid> { vm.ConsultantId }
         }, id);
 
         return RedirectToAction(nameof(Index));
