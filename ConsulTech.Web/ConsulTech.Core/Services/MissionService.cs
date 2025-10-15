@@ -24,7 +24,9 @@ namespace ConsulTech.Core.Services
                 Titre = missionDto.Titre,
                 Description = missionDto.Description,
                 Debut = missionDto.Debut,
-                Fin = missionDto.Fin
+                Fin = missionDto.Fin,
+                Budget = missionDto.Budget,
+                ClientId = missionDto.ClientId
             };
 
             await this._dbContext.Missions.AddAsync(missionToAdd);
@@ -64,6 +66,8 @@ namespace ConsulTech.Core.Services
             foundMission.Description = missionDto.Description;
             foundMission.Debut = missionDto.Debut;
             foundMission.Fin = missionDto.Fin;
+            foundMission.Budget = missionDto.Budget;
+            foundMission.ClientId = missionDto.ClientId;
 
             this._dbContext.Missions.Update(foundMission);
             await this._dbContext.SaveChangesAsync();
