@@ -7,7 +7,7 @@ namespace ConsulTech.Web.Services
         private readonly HttpClient _http;
         public ConsultantsClient(HttpClient http) => _http = http;
 
-        private const string BasePath = "api/consultants";
+        private const string BasePath = "api/consultant";
         public record SkillDto(Guid Id, string Titre);
         public record ConsultantDto(Guid Id, string Nom, string Prenom, string Email,
             DateTime DateEmbauche, bool EstDisponible, List<SkillDto> Competences);
@@ -28,7 +28,7 @@ namespace ConsulTech.Web.Services
 
         public async Task<ConsultantDto?> Get(Guid id)
         {
-            var res = await _http.GetAsync($"api/consultants/{id}");
+            var res = await _http.GetAsync($"api/consultant/{id}");
             if (res.StatusCode == HttpStatusCode.NotFound) return null;
             res.EnsureSuccessStatusCode();
             return await res.Content.ReadFromJsonAsync<ConsultantDto?>();
@@ -36,19 +36,19 @@ namespace ConsulTech.Web.Services
 
         public async Task<bool> Create(CreateConsultantDto dto)
         {
-            var res = await _http.PostAsJsonAsync("api/consultants", dto);
+            var res = await _http.PostAsJsonAsync("api/consultant", dto);
             return res.IsSuccessStatusCode;
         }
 
         public async Task<bool> Update(UpdateConsultantDto dto)
         {
-            var res = await _http.PutAsJsonAsync($"api/consultants/{dto.Id}", dto);
+            var res = await _http.PutAsJsonAsync($"api/consultant/{dto.Id}", dto);
             return res.IsSuccessStatusCode;
         }
 
         public async Task<bool> Delete(Guid id)
         {
-            var res = await _http.DeleteAsync($"api/consultants/{id}");
+            var res = await _http.DeleteAsync($"api/consultant/{id}");
             return res.IsSuccessStatusCode;
         }
 

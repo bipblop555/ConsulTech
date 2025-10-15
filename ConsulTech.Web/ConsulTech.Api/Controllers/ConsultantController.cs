@@ -1,8 +1,6 @@
 ﻿using ConsulTech.Api.Models;
 using ConsulTech.Core.DTO;
 using ConsulTech.Core.Services.Abstractions;
-using ConsulTech.Core.Services.Abstractions;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ConsulTech.Api.Controllers
@@ -38,6 +36,7 @@ namespace ConsulTech.Api.Controllers
             {
                 Nom = consultant.Nom,
                 Prenom = consultant.Prenom,
+                Email = consultant.Email,
                 DateEmbauche = consultant.DateEmbauche,
                 EstDisponible = consultant.EstDisponible
             });
@@ -55,6 +54,8 @@ namespace ConsulTech.Api.Controllers
             {
                 Id = consultant.Id,
                 Prenom = consultant.Prenom,
+                Nom = consultant.Nom,
+                Email = consultant.Email,
                 DateEmbauche = consultant.DateEmbauche,
                 EstDisponible = consultant.EstDisponible
             });

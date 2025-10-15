@@ -8,10 +8,10 @@ public class CompetencesClient
     public CompetencesClient(HttpClient http) => _http = http;
 
     public async Task<List<CompetenceDto>> GetAll()
-        => await _http.GetFromJsonAsync<List<CompetenceDto>>("api/competence") ?? new();
+        => await _http.GetFromJsonAsync<List<CompetenceDto>>("api/competences") ?? new();
     
     public async Task<CompetenceDto?> Get(Guid id)
-        => await _http.GetFromJsonAsync<CompetenceDto?>($"api/competence/{id}");
+        => await _http.GetFromJsonAsync<CompetenceDto?>($"api/competences/{id}");
 
     public async Task Create(CreateCompetenceDto dto)
     {
