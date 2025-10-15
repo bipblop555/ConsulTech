@@ -63,9 +63,18 @@ internal sealed class CompetenceService : ICompetenceService
             .Include(c => c.Niveau)
             .Include(c => c.Consultants)
             .FirstOrDefaultAsync(c => c.Id == competenceDto.Id);
-
         if (foundCompetence is null)
             return Guid.Empty;
-            throw new NotImplementedException();
+
+        foundCompetence!.Titre = competenceDto.Titre;
+        foundCompetence.Categorie = competenceDto.Categorie;
+        foundCompetence.Niveau = competenceDto.Niveau;
+        foundCompetence.Consultants = await this._dbContext.Consultants
+            .Where(con => con.Competences.Any(comp => comp.Id == competenceDto.Id))
+            .ToListAsync();
+
+        await this._dbContext.SaveChangesAsync();
+
+        return foundCompetence.Id;
     }
 }

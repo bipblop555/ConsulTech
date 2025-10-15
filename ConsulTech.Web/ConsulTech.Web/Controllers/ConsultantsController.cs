@@ -106,5 +106,14 @@ namespace ConsulTech.Web.Controllers
             return View(vm);
         }
 
+        // POST /Clients/Delete/{id}
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            var ok = await _consultants.Delete(id);
+            if (!ok) TempData["Error"] = "Suppression Impossible (API Indisponible ?)";
+            return RedirectToAction(nameof(Index));
+        }
     }
 }
