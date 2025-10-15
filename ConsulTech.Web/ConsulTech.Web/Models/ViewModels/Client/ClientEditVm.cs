@@ -14,6 +14,7 @@ namespace ConsulTech.Web.Models.ViewModels.Client
         public string Adresse { get; set; } = "";
 
         [Required, StringLength(120)]
+        [EmailAddress(ErrorMessage = "Le format de l’adresse e-mail n’est pas valide.")]
         public string Contact { get; set; } = "";
     }
 }
