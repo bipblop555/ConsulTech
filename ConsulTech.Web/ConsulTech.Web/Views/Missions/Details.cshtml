@@ -1,0 +1,24 @@
+﻿@model ConsulTech.Web.Models.ViewModels.Mission.MissionListVm
+@{
+    ViewData["Title"] = "Détails de la mission";
+}
+<h1 class="mb-3">Détails de la mission</h1>
+
+<div class="card">
+    <div class="card-body">
+        <h4 class="card-title">@Model.Titre</h4>
+        <dl class="row">
+            <dt class="col-sm-3">Client</dt>
+            <dd class="col-sm-9">@Model.ClientNom</dd>
+            <dt class="col-sm-3">Début</dt>
+            <dd class="col-sm-9">@Model.Debut.ToShortDateString()</dd>
+            <dt class="col-sm-3">Fin</dt>
+            <dd class="col-sm-9">@Model.Fin.ToShortDateString()</dd>
+            <dt class="col-sm-3">Budget</dt>
+            <dd class="col-sm-9">@Model.Budget.ToString("N2")</dd>
+            <dt class="col-sm-3">Description</dt>
+            <dd class="col-sm-9">@Model.Description</dd>
+        </dl>
+        <a class="btn btn-outline-secondary" asp-action="Index">Retour</a>
+    </div>
+</div>

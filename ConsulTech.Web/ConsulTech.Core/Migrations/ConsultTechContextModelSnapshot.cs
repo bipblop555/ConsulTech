@@ -22,6 +22,21 @@ namespace ConsulTech.Core.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("CompetenceConsultant", b =>
+                {
+                    b.Property<Guid>("CompetencesId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ConsultantsId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("CompetencesId", "ConsultantsId");
+
+                    b.HasIndex("ConsultantsId");
+
+                    b.ToTable("CompetenceConsultant");
+                });
+
             modelBuilder.Entity("ConsulTech.Core.Entities.Categorie", b =>
                 {
                     b.Property<Guid>("Id")
@@ -77,9 +92,6 @@ namespace ConsulTech.Core.Migrations
                     b.Property<Guid>("CategorieId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("ConsultantId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<Guid>("NiveauId")
                         .HasColumnType("uniqueidentifier");
 
@@ -91,8 +103,6 @@ namespace ConsulTech.Core.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CategorieId");
-
-                    b.HasIndex("ConsultantId");
 
                     b.HasIndex("NiveauId");
 
@@ -186,6 +196,21 @@ namespace ConsulTech.Core.Migrations
                     b.ToTable("Niveaux");
                 });
 
+            modelBuilder.Entity("CompetenceConsultant", b =>
+                {
+                    b.HasOne("ConsulTech.Core.Entities.Competence", null)
+                        .WithMany()
+                        .HasForeignKey("CompetencesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ConsulTech.Core.Entities.Consultant", null)
+                        .WithMany()
+                        .HasForeignKey("ConsultantsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("ConsulTech.Core.Entities.Competence", b =>
                 {
                     b.HasOne("ConsulTech.Core.Entities.Categorie", "Categorie")
@@ -193,10 +218,6 @@ namespace ConsulTech.Core.Migrations
                         .HasForeignKey("CategorieId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("ConsulTech.Core.Entities.Consultant", null)
-                        .WithMany("Competences")
-                        .HasForeignKey("ConsultantId");
 
                     b.HasOne("ConsulTech.Core.Entities.Niveau", "Niveau")
                         .WithMany()
@@ -226,8 +247,6 @@ namespace ConsulTech.Core.Migrations
 
             modelBuilder.Entity("ConsulTech.Core.Entities.Consultant", b =>
                 {
-                    b.Navigation("Competences");
-
                     b.Navigation("Missions");
                 });
 #pragma warning restore 612, 618

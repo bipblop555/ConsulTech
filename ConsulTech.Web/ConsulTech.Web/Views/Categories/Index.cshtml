@@ -1,0 +1,64 @@
+﻿@model List<ConsulTech.Web.Models.ViewModels.Categories.CategorieListVm>
+@{
+    ViewData["Title"] = "Catégories";
+}
+<h1 class="mb-3">Catégories</h1>
+
+@if (Model == null || !Model.Any())
+{
+    <div class="alert alert-info">Aucune catégorie pour le moment.</div>
+}
+else
+{
+    <table class="table table-striped align-middle">
+        <thead>
+            <tr>
+                <th>Titre</th>
+                <th class="text-end">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var c in Model)
+            {
+                <tr>
+                    <td>@c.Titre</td>
+                    <td class="text-end">
+                        <!-- ✏️ Edit -->
+                        <a class="btn btn-sm btn-outline-secondary"
+                           asp-controller="Categories"
+                           asp-action="Edit"
+                           asp-route-id="@c.Id">
+                            Edit
+                        </a>
+
+                        <!-- 📄 Details -->
+                        <a class="btn btn-sm btn-outline-primary"
+                           asp-controller="Categories"
+                           asp-action="Details"
+                           asp-route-id="@c.Id">
+                            Details
+                        </a>
+
+                        <!-- 🗑️ Delete -->
+                        <form asp-controller="Categories"
+                              asp-action="Delete"
+                              asp-route-id="@c.Id"
+                              method="post"
+                              class="d-inline">
+                            @Html.AntiForgeryToken()
+                            <button type="submit"
+                                    class="btn btn-sm btn-outline-danger"
+                                    onclick="return confirm('Supprimer ?')">
+                                Delete
+                            </button>
+                        </form>
+                    </td>
+
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+<p>
+    <a class="btn btn-primary" asp-action="Create">Nouvelle catégorie</a>
+</p>

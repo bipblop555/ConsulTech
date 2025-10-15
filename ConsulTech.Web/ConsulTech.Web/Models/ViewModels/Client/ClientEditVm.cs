@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace ConsulTech.Web.Models.ViewModels
+namespace ConsulTech.Web.Models.ViewModels.Client
 {
     public class ClientEditVm
     {
