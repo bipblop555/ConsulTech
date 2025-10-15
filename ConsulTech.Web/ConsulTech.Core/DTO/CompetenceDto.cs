@@ -8,9 +8,13 @@ public sealed class CompetenceDto
 
     public string Titre { get; set; } = string.Empty;
 
-    public Categorie Categorie { get; set; } = null!;
+    public string CategorieName { get; set; } = string.Empty;
 
-    public Niveau Niveau { get; set; } = null!;
+    public string NiveauName { get; set; } = string.Empty;
 
-    public Consultant Consultant { get; set; } = null!;
+    public Guid CategorieId { get; set; }
+
+    public Guid NiveauId { get; set; }
+
+    public Guid ConsultantsId { get; set; }
 }

@@ -1,0 +1,69 @@
+﻿@using ConsulTech.Web.Models.ViewModels.Competence
+@model List<CompetenceBaseViewModel>
+@{
+    ViewData["Title"] = "Compétences";
+}
+<h1 class="mb-3">Compétences</h1>
+
+@if (Model == null || !Model.Any())
+{
+    <div class="alert alert-info">Aucun client pour le moment.</div>
+}
+else
+{
+    <table class="table table-striped align-middle">
+        <thead>
+            <tr>
+                <th>Titre</th>
+                <th>Categorie</th>
+                <th>Niveau</th>
+                <th class="text-end">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var c in Model)
+            {
+                <tr>
+                    <td>@c.Titre</td>
+                    <td>@c.Categorie</td>
+                    <td>@c.Niveau</td>
+                    <td class="text-end">
+                        <!-- ✏️ Edit -->
+                        <a class="btn btn-sm btn-outline-secondary"
+                           asp-controller="Competence"
+                           asp-action="Edit"
+                           asp-route-id="@c.Id">
+                            Edit
+                        </a>
+
+                        <!-- 📄 Details -->
+                        <a class="btn btn-sm btn-outline-primary"
+                           asp-controller="Competence"
+                           asp-action="Details"
+                           asp-route-id="@c.Id">
+                            Details
+                        </a>
+
+                        <!-- 🗑️ Delete -->
+                        <form asp-controller="Competence"
+                              asp-action="Delete"
+                              asp-route-id="@c.Id"
+                              method="post"
+                              class="d-inline">
+                            @Html.AntiForgeryToken()
+                            <button type="submit"
+                                    class="btn btn-sm btn-outline-danger"
+                                    onclick="return confirm('Supprimer ?')">
+                                Delete
+                            </button>
+                        </form>
+                    </td>
+
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+<p>
+    <a class="btn btn-primary" asp-controller="Competence" asp-action="Create">Nouvelle compétence</a>
+</p>

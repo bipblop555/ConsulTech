@@ -1,4 +1,5 @@
-﻿using ConsulTech.Web.Models.ViewModels.Competence;
+﻿using ConsulTech.Web.Models.Dtos.Competence;
+using ConsulTech.Web.Models.ViewModels.Competence;
 using ConsulTech.Web.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -11,26 +12,33 @@ public class CompetenceController : Controller
     private readonly CompetencesClient _clients;
     private readonly NiveauClient _niveaux;
     private readonly CategoriesClient _categories;
+    private readonly ConsultantsClient _consultants;
 
-    public CompetenceController(CompetencesClient client, NiveauClient niveauClient, CategoriesClient categoriesClient)
+    public CompetenceController
+        (
+        CompetencesClient client,
+        NiveauClient niveauClient,
+        CategoriesClient categoriesClient,
+         ConsultantsClient consultants
+        )
     {
         _clients = client;
         _niveaux = niveauClient;
         _categories = categoriesClient;
+        _consultants = consultants;
     }
 
     // GET: CompetenceController
     public async Task<ActionResult> Index()
     {
-        var dtos = await _clients.GetAll();
+        List<CompetenceDto>? dtos = await _clients.GetAll();
 
-        var vm = dtos.Select(c => new CompetenceBaseViewModel
+        List<CompetenceBaseViewModel>? vm = dtos.Select(c => new CompetenceBaseViewModel
         {
             Id = c.Id,
             Titre = c.Titre,
-            Categorie = c.Categorie.Titre,
-            Niveau = c.Niveau.Titre,
-            Consultant = c.Consultant
+            Categorie = c.CategorieName,
+            Niveau = c.NiveauName
         }).ToList();
         return View(vm);
     }
@@ -45,91 +53,115 @@ public class CompetenceController : Controller
         {
             Id = competence.Id,
             Titre = competence.Titre,
-            Categorie = competence.Categorie.Titre,
-            Niveau = competence.Niveau.Titre,
-            Consultant = competence.Consultant
+            Categorie = competence.CategorieName,
+            Niveau = competence.NiveauName,
         };
         return View(vm);
     }
 
     // GET: CompetenceController/Create
-    public ActionResult Create()
+    public async Task<ActionResult> Create()
     {
-        return View();
+        var vm = new CompetenceEditViewModel();
+        vm = await PopulateListAsync(vm);
+        return View(vm);
     }
 
     // POST: CompetenceController/Create
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public ActionResult Create(IFormCollection collection)
+    public async Task<IActionResult> Create(CompetenceEditViewModel vm)
     {
-        try
+        if (!ModelState.IsValid)
         {
-            return RedirectToAction(nameof(Index));
+            vm = await PopulateListAsync(vm);
+            return View(vm);
         }
-        catch
+
+        var dto = new CreateCompetenceDto
         {
-            return View();
-        }
+            Titre = vm.Titre,
+            CategorieId = vm.CategorieId,
+            NiveauId = vm.NiveauId,
+            ConsultantsId = new List<Guid> { vm.ConsultantId }
+        };
+
+        await _clients.Create(dto);
+        return RedirectToAction(nameof(Index));
     }
 
     // GET: CompetenceController/Edit/5
-    public ActionResult Edit(int id)
+    public async Task<ActionResult> Edit(Guid id)
     {
-        return View();
+        CompetenceDto? compFromApi = await _clients.Get(id);
+        if (compFromApi is null)
+            return NotFound();
+
+        var vm = new CompetenceEditViewModel
+        {
+            Id = compFromApi.Id,
+            Titre = compFromApi.Titre,
+            CategorieId = compFromApi.CategorieId,
+            NiveauId = compFromApi.NiveauId,
+        };
+
+        vm = await PopulateListAsync(vm);
+
+        return View(vm);
     }
 
     // POST: CompetenceController/Edit/5
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public ActionResult Edit(int id, IFormCollection collection)
+    public async Task<ActionResult> Edit(Guid id, CompetenceEditViewModel vm)
     {
-        try
+        if (!ModelState.IsValid)
         {
-            return RedirectToAction(nameof(Index));
+            return View(vm);
         }
-        catch
+
+        await _clients.Update(new CreateCompetenceDto
         {
-            return View();
-        }
+            Titre = vm.Titre,
+            CategorieId = vm.CategorieId,
+            NiveauId = vm.NiveauId,
+            ConsultantsId = new List<Guid> { vm.ConsultantId }
+        }, id);
+
+        return RedirectToAction(nameof(Index));
     }
 
     // GET: CompetenceController/Delete/5
-    public ActionResult Delete(int id)
+    public async Task<ActionResult> Delete(Guid id)
     {
-        return View();
-    }
-
-    // POST: CompetenceController/Delete/5
-    [HttpPost]
-    [ValidateAntiForgeryToken]
-    public ActionResult Delete(int id, IFormCollection collection)
-    {
-        try
-        {
-            return RedirectToAction(nameof(Index));
-        }
-        catch
-        {
-            return View();
-        }
+        var ok = await _clients.Delete(id);
+        if (!ok) TempData["Error"] = "Suppression Impossible (API Indisponible ?)";
+        return RedirectToAction(nameof(Index));
     }
 
     private async Task<CompetenceEditViewModel> PopulateListAsync(CompetenceEditViewModel vm)
     {
         var niveauxFromApi = await _niveaux.GetAll();
-        if(niveauxFromApi is not null)
+        if (niveauxFromApi is not null)
         {
             vm.Niveaux = niveauxFromApi
-                .Select(n => new SelectListItem { Value = n.Id.ToString(), Text = n.Titre})
+                .Select(n => new SelectListItem { Value = n.Id.ToString(), Text = n.Titre })
                 .ToList();
         }
 
         var categoriesFromApi = await _categories.GetAll();
-        if(categoriesFromApi is not null)
+        if (categoriesFromApi is not null)
         {
             vm.Categories = categoriesFromApi
                 .Select(c => new SelectListItem { Value = c.Id.ToString(), Text = c.Titre })
+                .ToList();
+        }
+
+        List<ConsultantsClient.ConsultantDto>? consultantFromApi = await _consultants.GetAll();
+        if (consultantFromApi is not null)
+        {
+            vm.Consultants = consultantFromApi
+                .Select(c => new SelectListItem { Value = c.Id.ToString(), Text = c.Nom })
                 .ToList();
         }
 

@@ -9,6 +9,7 @@ namespace ConsulTech.Web.Services
 
         private const string BasePath = "api/consultant";
         public record SkillDto(Guid Id, string Titre);
+
         public record ConsultantDto(Guid Id, string Nom, string Prenom, string Email,
             DateTime DateEmbauche, bool EstDisponible, List<SkillDto> Competences);
 
