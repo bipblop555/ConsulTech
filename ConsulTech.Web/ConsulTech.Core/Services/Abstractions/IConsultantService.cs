@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace ConsulTech.Core.Services.Abstractions
 {
-    internal interface IConsultantService
+    public interface IConsultantService
     {
         Task<List<Consultant>> GetAllConsultantsAsync();
         Task<Consultant> GetConsultantByIdAsync(Guid id);
