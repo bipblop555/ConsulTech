@@ -16,4 +16,6 @@ public sealed class Competence : ICategorie
 
     public Categorie Categorie { get; set; } = null!;
     public Niveau Niveau { get; set; } = null!;
+
+    public List<Consultant> Consultants { get; set; } = null!;
 }
