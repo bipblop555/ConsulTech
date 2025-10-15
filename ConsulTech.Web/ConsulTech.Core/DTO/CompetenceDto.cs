@@ -1,20 +1,16 @@
 ﻿using ConsulTech.Core.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace ConsulTech.Core.DTO
+namespace ConsulTech.Core.DTO;
+
+public sealed class CompetenceDto
 {
-    public sealed class CompetenceDto
-    {
-        public Guid Id { get; set; }
+    public Guid Id { get; set; }
 
-        public string Titre { get; set; } = string.Empty;
+    public string Titre { get; set; } = string.Empty;
 
-        public Categorie Categorie { get; set; } = null!;
+    public Categorie Categorie { get; set; } = null!;
 
-        public Niveau Niveau { get; set; } = null!;
-    }
+    public Niveau Niveau { get; set; } = null!;
+
+    public Consultant Consultant { get; set; } = null!;
 }

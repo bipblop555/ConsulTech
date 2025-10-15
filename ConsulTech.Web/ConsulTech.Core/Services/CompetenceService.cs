@@ -43,6 +43,7 @@ internal sealed class CompetenceService : ICompetenceService
         return await this._dbContext.Competences
             .Include(c => c.Categorie)
             .Include(c => c.Niveau)
+            .Include(c => c.Consultants)
             .ToListAsync();
     }
 
@@ -51,11 +52,20 @@ internal sealed class CompetenceService : ICompetenceService
         return await this._dbContext.Competences
             .Include(c => c.Categorie)
             .Include(c => c.Niveau)
+            .Include(c => c.Consultants)
             .FirstOrDefaultAsync(c => c.Id == id);
     }
 
-    public Task<Guid> UpdateCompetenceAsync(CompetenceDto competenceDto)
+    public async Task<Guid> UpdateCompetenceAsync(CompetenceDto competenceDto)
     {
-        throw new NotImplementedException();
+        var foundCompetence = await this._dbContext.Competences
+            .Include(c => c.Categorie)
+            .Include(c => c.Niveau)
+            .Include(c => c.Consultants)
+            .FirstOrDefaultAsync(c => c.Id == competenceDto.Id);
+
+        if (foundCompetence is null)
+            return Guid.Empty;
+            throw new NotImplementedException();
     }
 }
