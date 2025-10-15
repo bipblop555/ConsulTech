@@ -47,12 +47,12 @@ namespace ConsulTech.Core.Services
 
         public async Task<List<Mission>> GetAllMissionAsync()
         {
-            return await this._dbContext.Missions.ToListAsync();
+            return await this._dbContext.Missions.Include(m => m.Client).ToListAsync();
         }
 
         public async Task<Mission?> GetMissionByIdAsync(Guid id)
         {
-            return await this._dbContext.Missions.FirstOrDefaultAsync(m => m.Id == id);
+            return await this._dbContext.Missions.Include(m => m.Client).FirstOrDefaultAsync(m => m.Id == id);
         }
 
         public async Task<Guid> UpdateMissionAsync(MissionDto missionDto)
