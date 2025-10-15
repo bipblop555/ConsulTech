@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using ConsulTech.Web.Models.Dtos.Consultant;
+using System.Net;
 
 namespace ConsulTech.Web.Services
 {
@@ -8,16 +9,6 @@ namespace ConsulTech.Web.Services
         public ConsultantsClient(HttpClient http) => _http = http;
 
         private const string BasePath = "api/consultant";
-        public record SkillDto(Guid Id, string Titre);
-
-        public record ConsultantDto(Guid Id, string Nom, string Prenom, string Email,
-            DateTime DateEmbauche, bool EstDisponible, List<SkillDto> Competences);
-
-        public record CreateConsultantDto(string Nom, string Prenom, string Email,
-            DateTime DateEmbauche, bool EstDisponible);
-
-        public record UpdateConsultantDto(Guid Id, string Nom, string Prenom, string Email,
-            DateTime DateEmbauche, bool EstDisponible);
 
         public async Task<List<ConsultantDto>> GetAll()
         {

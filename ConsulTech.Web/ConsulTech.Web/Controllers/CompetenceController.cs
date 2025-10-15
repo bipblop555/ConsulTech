@@ -1,4 +1,5 @@
 ﻿using ConsulTech.Web.Models.Dtos.Competence;
+using ConsulTech.Web.Models.Dtos.Consultant;
 using ConsulTech.Web.Models.ViewModels.Competence;
 using ConsulTech.Web.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -157,7 +158,7 @@ public class CompetenceController : Controller
                 .ToList();
         }
 
-        List<ConsultantsClient.ConsultantDto>? consultantFromApi = await _consultants.GetAll();
+        List<ConsultantDto>? consultantFromApi = await _consultants.GetAll();
         if (consultantFromApi is not null)
         {
             vm.Consultants = consultantFromApi

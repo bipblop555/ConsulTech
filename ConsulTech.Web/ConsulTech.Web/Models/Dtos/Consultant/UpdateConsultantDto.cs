@@ -1,6 +1,6 @@
 ﻿namespace ConsulTech.Web.Models.Dtos.Consultant;
 
-public sealed record ConsultantDto
+public sealed record UpdateConsultantDto
 {
     public Guid Id { get; set; }
     public string Nom { get; set; } = string.Empty;
@@ -8,13 +8,4 @@ public sealed record ConsultantDto
     public string Email { get; set; } = string.Empty;
     public DateTime DateEmbauche { get; set; }
     public bool EstDisponible { get; set; }
-
-    public List<SkillDto> Competences { get; set; } = new();
-}
-
-public sealed record SkillDto
-{
-    public Guid Id { get; set; }
-
-    public string Titre { get; set; } = string.Empty;
 }

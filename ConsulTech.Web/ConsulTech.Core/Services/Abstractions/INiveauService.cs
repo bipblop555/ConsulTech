@@ -10,8 +10,8 @@ namespace ConsulTech.Core.Services.Abstractions
 {
     public interface INiveauService
     {
-        Task<List<Niveau>> GetAllNiveauxAsync();
-        Task<Niveau?> GetNiveauByIdAsync(Guid id);
+        Task<List<NiveauDto>> GetAllNiveauxAsync();
+        Task<NiveauDto?> GetNiveauByIdAsync(Guid id);
         Task<Guid> CreateNiveauAsync(NiveauDto niveauDto);
         Task<Guid> UpdateNiveauAsync(NiveauDto niveauDto);
         Task<bool> DeleteNiveauAsync(Guid id);

@@ -38,14 +38,26 @@ internal sealed class NiveauService : INiveauService
         return true;
     }
 
-    public async Task<List<Niveau>> GetAllNiveauxAsync()
+    public async Task<List<NiveauDto>> GetAllNiveauxAsync()
     {
-        return await this._dbContext.Niveaux.ToListAsync();
+        return await this._dbContext.Niveaux
+            .Select(n => new NiveauDto
+            {
+                Id = n.Id,
+                Titre = n.Titre
+            })
+            .ToListAsync();
     }
 
-    public async Task<Niveau?> GetNiveauByIdAsync(Guid id)
+    public async Task<NiveauDto?> GetNiveauByIdAsync(Guid id)
     {
-        return await this._dbContext.Niveaux.FirstOrDefaultAsync(n => n.Id == id);
+        return await this._dbContext.Niveaux
+            .Select(n => new NiveauDto
+            {
+                Id = n.Id,
+                Titre = n.Titre
+            })
+            .FirstOrDefaultAsync(n => n.Id == id);
     }
 
     public async Task<Guid> UpdateNiveauAsync(NiveauDto niveauDto)
