@@ -8,6 +8,12 @@
 <form asp-action="Edit" asp-route-id="@id" method="post">
     @Html.AntiForgeryToken()
 
+    <!-- Affiche les erreurs serveur/validation -->
+    <div asp-validation-summary="ModelOnly" class="text-danger mb-2"></div>
+
+    <!-- Double sécurité: poste aussi l'id -->
+    <input type="hidden" name="id" value="@id" />
+
     <div class="mb-3">
         <label asp-for="Titre" class="form-label"></label>
         <input asp-for="Titre" class="form-control" />
@@ -33,7 +39,7 @@
         </div>
         <div class="col-md-4">
             <label asp-for="Budget" class="form-label"></label>
-            <input asp-for="Budget" class="form-control" />
+            <input asp-for="Budget" type="number" step="0.01" class="form-control" />
             <span asp-validation-for="Budget" class="text-danger"></span>
         </div>
     </div>
@@ -52,7 +58,7 @@
         <span asp-validation-for="ClientId" class="text-danger"></span>
     </div>
 
-    <button class="btn btn-primary">Enregistrer</button>
+    <button type="submit" class="btn btn-primary">Enregistrer</button>
     <a class="btn btn-secondary" asp-action="Index">Annuler</a>
 </form>
 

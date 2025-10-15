@@ -28,5 +28,6 @@ public sealed class Mission : ICategorie
     [Range(0, float.MaxValue, ErrorMessage = "Le budget doit être un nombre positif.")]
     public float Budget { get; set; }
 
+    public Guid ClientId { get; set; }
     public Client Client { get; set; } = null!;
 }

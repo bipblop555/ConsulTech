@@ -39,7 +39,8 @@ namespace ConsulTech.Api.Controllers
                 Description = mission.Description,
                 Debut = mission.Debut,
                 Fin = mission.Fin,
-                Budget = mission.Budget
+                Budget = mission.Budget,
+                ClientId = mission.ClientId
             });
 
             return createdMissionId != Guid.Empty ? Created($"/api/mission/{createdMissionId}", null) : Problem();
@@ -54,10 +55,12 @@ namespace ConsulTech.Api.Controllers
             var updatedMissionId = await this._missionService.UpdateMissionAsync(new MissionDto
             {
                 Id = mission.Id,
+                Titre = mission.Titre,
                 Description = mission.Description,
                 Debut = mission.Debut,
                 Fin = mission.Fin,
-                Budget = mission.Budget
+                Budget = mission.Budget,
+                ClientId = mission.ClientId
             });
 
             return updatedMissionId != Guid.Empty ? NoContent() : Problem();
