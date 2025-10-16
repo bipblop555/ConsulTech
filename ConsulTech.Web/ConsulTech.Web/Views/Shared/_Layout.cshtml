@@ -43,9 +43,6 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Niveaux" asp-action="Index">Niveaux</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Consultants" asp-action="Index">Consultants</a>
-                        </li>
-                        <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Competence" asp-action="Index">Competence</a>
                         </li>
                             <a class="nav-link text-dark" asp-controller="Dashboard" asp-action="Index">Dashboard</a>
@@ -70,6 +67,9 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
-    @await RenderSectionAsync("Scripts", required: false)
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    @RenderSection("Scripts", required: false)
+
 </body>
 </html>

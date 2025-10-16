@@ -7,7 +7,7 @@
 <div class="row g-3">
     <div class="col-md-4">
         <div class="card shadow-sm">
-            <div class="card-body">
+            <div class="card-body" style="min-height: 10rem;">
                 <h6 class="text-muted">Clients</h6>
                 <h3 class="mb-0">@Model.TotalClients</h3>
             </div>
@@ -15,7 +15,7 @@
     </div>
     <div class="col-md-4">
         <div class="card shadow-sm">
-            <div class="card-body">
+            <div class="card-body" style="min-height: 10rem;">
                 <h6 class="text-muted">Missions (total)</h6>
                 <h3 class="mb-0">@Model.TotalMissions</h3>
                 <small class="text-muted">En cours: @Model.MissionsEnCours • À venir: @Model.MissionsAVenir</small>
@@ -24,7 +24,7 @@
     </div>
     <div class="col-md-4">
         <div class="card shadow-sm">
-            <div class="card-body">
+            <div class="card-body" style="min-height: 10rem;">
                 <h6 class="text-muted">Budget en cours</h6>
                 <h3 class="mb-0">@Model.BudgetTotalEnCours.ToString("N2")</h3>
             </div>
@@ -33,7 +33,7 @@
 
     <div class="col-md-4">
         <div class="card shadow-sm">
-            <div class="card-body">
+            <div class="card-body" style="min-height: 10rem;">
                 <h6 class="text-muted">Consultants</h6>
                 <h3 class="mb-0">@Model.ConsultantsTotal</h3>
                 <small class="text-muted">Disponibles: @Model.ConsultantsDisponibles</small>
@@ -45,7 +45,7 @@
 <div class="row g-3 mt-4">
     <div class="col-lg-6">
         <div class="card shadow-sm">
-            <div class="card-body">
+            <div class="card-body" style="min-height: 10rem;">
                 <h5 class="card-title">Missions à venir</h5>
                 @if (Model.UpcomingMissions == null || Model.UpcomingMissions.Count == 0)
                 {
@@ -88,7 +88,7 @@
 
     <div class="col-lg-6">
         <div class="card shadow-sm">
-            <div class="card-body">
+            <div class="card-body" style="min-height: 10rem;">
                 <h5 class="card-title">Consultants disponibles</h5>
                 @if (Model.ConsultantsDispos == null || Model.ConsultantsDispos.Count == 0)
                 {
@@ -118,3 +118,134 @@
         </div>
     </div>
 </div>
+
+<h5 class="mt-4">Outils de reporting</h5>
+
+<canvas id="barCanvas" aria-label="Valeur budgétaire client" style="width: 600px !important; height: 400px !important"></canvas>
+
+<canvas id="doughNutCanvas" aria-label="Compétences chez ConsulTech" width="200" height="200"></canvas>
+
+@section Scripts {
+
+    <script>
+        var labels = [];
+        var budgetParCLient = {};
+
+        console.log(budgetParCLient);
+
+        fetch("https://localhost:7136/api/mission", {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+
+            const ctx = document.getElementById('barCanvas').getContext('2d');
+
+            data.forEach(function(item) {
+                if(budgetParCLient[item.clientNom]) {
+                    budgetParCLient[item.clientNom] += item.budget;
+                } else {
+                    budgetParCLient[item.clientNom] = item.budget;
+                }
+                labels.push(item.clientNom);
+            });
+
+            labels = Object.keys(budgetParCLient);
+            var budget = Object.values(budgetParCLient);
+
+            new Chart(ctx, {
+              type: 'bar',
+              data: {
+                labels: [...labels],
+                datasets: [{
+                  label: 'Valeur budgétaire',
+                  data: [...budget],
+                  borderWidth: 1,
+                  backgroundColor: "rgb(140, 189, 207)",
+                }]
+              },
+              options: {
+                scales: {
+                  y: {
+                    beginAtZero: true
+                  }
+                },
+                layout: {
+                    padding: 150
+                },
+                plugins: {
+                    title: {
+                        text: "Valeur budgétaire par client",
+                        display: true,
+                        position: "top"
+                    }
+                }
+              }
+            });
+        })
+        .catch(error => console.error('Error fetching data:', error));
+
+        var countParCompetence = {};
+
+        fetch("https://localhost:7136/api/competence", {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data)
+            data.forEach(function(item) {
+                if(countParCompetence[item.titre]) {
+                    countParCompetence[item.titre] += 1;
+                } else {
+                    countParCompetence[item.titre] = 1;
+                }
+            });
+            console.log(countParCompetence);
+            var labelsDonut = Object.keys(countParCompetence);
+            var valuesDonut = Object.values(countParCompetence);
+
+            console.log(labelsDonut, valuesDonut)
+            const ctx = document.getElementById('doughNutCanvas').getContext('2d');
+            new Chart(ctx, {
+              type: 'doughnut',
+              data: {
+                    labels: [...labelsDonut],
+                    datasets: [{
+                      label: 'Collaborateurs',
+                      data: [...valuesDonut],
+                      backgroundColor: [
+                        'rgb(255, 99, 132)',
+                        'rgb(54, 162, 235)',
+                        'rgb(255, 205, 86)'
+                      ],
+                      hoverOffset: 4
+                    }]
+              },
+              options: {
+                scales: {
+                  y: {
+                    beginAtZero: true
+                  }
+                },
+                layout: {
+                    padding: 250
+                },
+                plugins: {
+                    title: {
+                        text: "Compétence par collaborateur",
+                        display: true,
+                        position: "top"
+                    }
+                }
+              }
+            });
+        }).catch(error => console.error('Error fetching data:', error));
+    </script>
+}
