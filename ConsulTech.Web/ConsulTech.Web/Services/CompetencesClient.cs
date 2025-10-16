@@ -15,6 +15,21 @@ public class CompetencesClient
 
     public async Task Create(CreateCompetenceDto dto)
     {
-
+        var res = await _http.PostAsJsonAsync("api/competence", dto);
+        res.EnsureSuccessStatusCode();
     }
+
+    public async Task Update(CreateCompetenceDto dto, Guid id)
+    {
+        var res = await _http.PutAsJsonAsync($"api/competence/{id}", dto);
+        res.EnsureSuccessStatusCode();
+    }
+
+    public async Task<bool> Delete(Guid id)
+    {
+        var res = await _http.DeleteAsync($"api/competence/{id}");
+        return res.IsSuccessStatusCode;
+    }
+
+
 }

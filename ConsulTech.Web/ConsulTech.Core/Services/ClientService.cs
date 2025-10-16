@@ -42,14 +42,32 @@ internal sealed class ClientService : IClientService
         return true;
     }
 
-    public async Task<List<Client>> GetAllClientsAsync()
+    public async Task<List<ClientDto>> GetAllClientsAsync()
     {
-        return await this._dbContext.Clients.ToListAsync();
+        return await this._dbContext.Clients
+            .Select(c => new ClientDto
+            {
+                Id = c.Id,
+                Nom = c.Nom,
+                Secteur = c.Secteur,
+                Adresse = c.Adresse,
+                Contact = c.Contact
+            })
+            .ToListAsync();
     }
 
-    public async Task<Client?> GetClientByIdAsync(Guid id)
+    public async Task<ClientDto?> GetClientByIdAsync(Guid id)
     {
-        return await this._dbContext.Clients.FirstOrDefaultAsync(c => c.Id == id);
+        return await this._dbContext.Clients
+            .Select(c => new ClientDto
+            {
+                Id = c.Id,
+                Nom = c.Nom,
+                Secteur = c.Secteur,
+                Adresse = c.Adresse,
+                Contact = c.Contact
+            })
+            .FirstOrDefaultAsync(c => c.Id == id);
     }
 
     public async Task<Guid> UpdateClientAsync(ClientDto clientDto)
@@ -66,7 +84,7 @@ internal sealed class ClientService : IClientService
 
         this._dbContext.Clients.Update(foundClient);
         await this._dbContext.SaveChangesAsync();
-        
+
         return foundClient.Id;
     }
 }

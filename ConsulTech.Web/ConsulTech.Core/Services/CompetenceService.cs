@@ -14,17 +14,26 @@ internal sealed class CompetenceService : ICompetenceService
 
     public async Task<Guid> CreateCompetenceAsync(CompetenceDto competenceDto)
     {
-        var competenceToAdd = new Competence
+
+        var categorie = await _dbContext.Categories.FindAsync(competenceDto.CategorieId);
+        var niveau = await _dbContext.Niveaux.FindAsync(competenceDto.NiveauId);
+        var consultant = await _dbContext.Consultants.FindAsync(competenceDto.ConsultantsId);
+
+        if (categorie is null || niveau is null || consultant is null)
+            return Guid.Empty;
+
+        var competence = new Competence
         {
             Titre = competenceDto.Titre,
-            Niveau = competenceDto.Niveau,
-            Categorie = competenceDto.Categorie
+            Categorie = categorie,
+            Niveau = niveau,
+            Consultants = new List<Consultant>() { consultant }
         };
 
-        await this._dbContext.Competences.AddAsync(competenceToAdd);
-        await this._dbContext.SaveChangesAsync();
+        _dbContext.Competences.Add(competence);
+        await _dbContext.SaveChangesAsync();
 
-        return competenceToAdd.Id;
+        return competence.Id;
     }
 
     public async Task<bool> DeleteCompetenceAsync(Guid id)
@@ -38,22 +47,44 @@ internal sealed class CompetenceService : ICompetenceService
         return true;
     }
 
-    public async Task<List<Competence>> GetAllCompetencesAsync()
+    public async Task<List<CompetenceDto>> GetAllCompetencesAsync()
     {
+        // retourner la liste de compétence dto 
+        // convertir en DTO
         return await this._dbContext.Competences
-            .Include(c => c.Categorie)
+            .Include(cat => cat.Categorie)
             .Include(c => c.Niveau)
-            .Include(c => c.Consultants)
+            .Include(consultant => consultant.Consultants)
+            .Select(comp => new CompetenceDto
+            {
+                Id = comp.Id,
+                Titre = comp.Titre,
+                CategorieName = comp.Categorie.Titre,
+                NiveauName = comp.Niveau.Titre,
+                CategorieId = comp.Categorie.Id,
+                NiveauId = comp.Niveau.Id,
+                ConsultantsId = comp.Consultants.FirstOrDefault() != null ? comp.Consultants.First().Id : Guid.Empty
+            })
             .ToListAsync();
     }
 
-    public async Task<Competence?> GetCompetenceByIdAsync(Guid id)
+    public async Task<CompetenceDto> GetCompetenceByIdAsync(Guid id)
     {
         return await this._dbContext.Competences
             .Include(c => c.Categorie)
             .Include(c => c.Niveau)
             .Include(c => c.Consultants)
-            .FirstOrDefaultAsync(c => c.Id == id);
+            .Select(comp => new CompetenceDto
+            {
+                Id = comp.Id,
+                Titre = comp.Titre,
+                CategorieName = comp.Categorie.Titre,
+                NiveauName = comp.Niveau.Titre,
+                CategorieId = comp.Categorie.Id,
+                NiveauId = comp.Niveau.Id,
+                ConsultantsId = comp.Consultants.FirstOrDefault() != null ? comp.Consultants.First().Id : Guid.Empty
+            })
+            .FirstOrDefaultAsync(c => c.Id == id) ?? new();
     }
 
     public async Task<Guid> UpdateCompetenceAsync(CompetenceDto competenceDto)
@@ -63,9 +94,18 @@ internal sealed class CompetenceService : ICompetenceService
             .Include(c => c.Niveau)
             .Include(c => c.Consultants)
             .FirstOrDefaultAsync(c => c.Id == competenceDto.Id);
-
         if (foundCompetence is null)
             return Guid.Empty;
-            throw new NotImplementedException();
+
+        foundCompetence!.Titre = competenceDto.Titre;
+        foundCompetence.Categorie.Id = competenceDto.CategorieId;
+        foundCompetence.Niveau.Id = competenceDto.NiveauId;
+        foundCompetence.Consultants = await this._dbContext.Consultants
+            .Where(con => con.Competences.Any(comp => comp.Id == competenceDto.Id))
+            .ToListAsync();
+
+        await this._dbContext.SaveChangesAsync();
+
+        return foundCompetence.Id;
     }
 }

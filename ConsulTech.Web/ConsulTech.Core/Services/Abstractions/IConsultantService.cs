@@ -10,8 +10,8 @@ namespace ConsulTech.Core.Services.Abstractions
 {
     public interface IConsultantService
     {
-        Task<List<Consultant>> GetAllConsultantsAsync();
-        Task<Consultant> GetConsultantByIdAsync(Guid id);
+        Task<List<ConsultantDto>> GetAllConsultantsAsync();
+        Task<ConsultantDto> GetConsultantByIdAsync(Guid id);
         Task<Guid> CreateConsultantAsync(ConsultantDto consultantDto);
         Task<Guid> UpdateConsultantAsync(ConsultantDto consultantDto);
         Task<bool> DeleteConsultantAsync(Guid id);

@@ -40,14 +40,26 @@ internal sealed class CategorieService : ICategorieService
         return true;
     }
 
-    public async Task<List<Categorie>> GetAllCategoriesAsync()
+    public async Task<List<CategorieDto>> GetAllCategoriesAsync()
     {
-        return await this._dbContext.Categories.ToListAsync();
+        return await this._dbContext.Categories
+            .Select(c => new CategorieDto
+            {
+                Id = c.Id,
+                Titre = c.Titre
+            })
+            .ToListAsync();
     }
 
-    public async Task<Categorie?> GetCategorieByIdAsync(Guid id)
+    public async Task<CategorieDto?> GetCategorieByIdAsync(Guid id)
     {
-        return await this._dbContext.Categories.FirstOrDefaultAsync(c => c.Id == id);
+        return await this._dbContext.Categories
+            .Select(c => new CategorieDto
+            {
+                Id = c.Id,
+                Titre = c.Titre
+            })
+            .FirstOrDefaultAsync(c => c.Id == id);
     }
 
     public async Task<Guid> UpdateCategorieAsync(CategorieDto categorieDto)

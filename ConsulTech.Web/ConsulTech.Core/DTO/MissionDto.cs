@@ -21,6 +21,6 @@ namespace ConsulTech.Core.DTO
 
         public float Budget { get; set; }
 
-        public Client Client { get; set; } = null!;
+        public Guid ClientId { get; set; }
     }
 }

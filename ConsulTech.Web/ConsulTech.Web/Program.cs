@@ -13,9 +13,7 @@ builder.Services.AddHttpClient<MissionsClient>(c => c.BaseAddress = apiBase);
 builder.Services.AddHttpClient<ConsultantsClient>(c => c.BaseAddress = apiBase);
 builder.Services.AddHttpClient<CategoriesClient>(c => c.BaseAddress = apiBase);
 builder.Services.AddHttpClient<NiveauClient>(c => c.BaseAddress = apiBase);
-//builder.Services.AddHttpClient<ConsultantsClient>(c => c.BaseAddress = apiBase);
-//builder.Services.AddHttpClient<CompetencesClient>(c => c.BaseAddress = apiBase);
-
+builder.Services.AddHttpClient<CompetencesClient>(c => c.BaseAddress = apiBase);
 
 var app = builder.Build();
 

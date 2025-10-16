@@ -17,17 +17,46 @@ namespace ConsulTech.Api.Controllers
             _missionService = missionService;
         }
 
+        public record MissionOutput(
+            Guid Id, string Titre, string Description,
+            DateTime Debut, DateTime Fin, float Budget,
+            Guid ClientId, string ClientNom
+        );
+
         [HttpGet]
         public async Task<ActionResult> GetAllMissionAsync()
         {
-            return Ok(await this._missionService.GetAllMissionAsync());
+            var missions = await _missionService.GetAllMissionAsync();
+            var output = missions.Select(m => new MissionOutput(
+                m.Id,
+                m.Titre,
+                m.Description,
+                m.Debut,
+                m.Fin,
+                m.Budget,
+                m.ClientId,
+                m.Client?.Nom ?? "-"
+            ));
+            return Ok(output);
         }
 
         [HttpGet("{id:Guid}")]
         public async Task<ActionResult> GetMissionByIdAsync(Guid id)
         {
-            var foundMission = await this._missionService.GetMissionByIdAsync(id);
-            return foundMission is null ? NotFound() : Ok(foundMission);
+            var m = await _missionService.GetMissionByIdAsync(id);
+            if (m is null) return NotFound();
+
+            var dto = new MissionOutput(
+                m.Id,
+                m.Titre,
+                m.Description,
+                m.Debut,
+                m.Fin,
+                m.Budget,
+                m.ClientId,
+                m.Client?.Nom ?? "-"
+            );
+            return Ok(dto);
         }
 
         [HttpPost]
@@ -39,7 +68,8 @@ namespace ConsulTech.Api.Controllers
                 Description = mission.Description,
                 Debut = mission.Debut,
                 Fin = mission.Fin,
-                Budget = mission.Budget
+                Budget = mission.Budget,
+                ClientId = mission.ClientId
             });
 
             return createdMissionId != Guid.Empty ? Created($"/api/mission/{createdMissionId}", null) : Problem();
@@ -54,10 +84,12 @@ namespace ConsulTech.Api.Controllers
             var updatedMissionId = await this._missionService.UpdateMissionAsync(new MissionDto
             {
                 Id = mission.Id,
+                Titre = mission.Titre,
                 Description = mission.Description,
                 Debut = mission.Debut,
                 Fin = mission.Fin,
-                Budget = mission.Budget
+                Budget = mission.Budget,
+                ClientId = mission.ClientId
             });
 
             return updatedMissionId != Guid.Empty ? NoContent() : Problem();
