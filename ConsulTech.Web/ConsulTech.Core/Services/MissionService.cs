@@ -29,6 +29,15 @@ namespace ConsulTech.Core.Services
                 ClientId = missionDto.ClientId
             };
 
+            if (missionDto.ConsultantIds is not null && missionDto.ConsultantIds.Count > 0)
+            {
+                var consultants = await _dbContext.Consultants
+                    .Where(c => missionDto.ConsultantIds.Contains(c.Id))
+                    .ToListAsync();
+
+                missionToAdd.Consultants = consultants;
+            }
+
             await this._dbContext.Missions.AddAsync(missionToAdd);
             await this._dbContext.SaveChangesAsync();
             return missionToAdd.Id;
@@ -47,12 +56,12 @@ namespace ConsulTech.Core.Services
 
         public async Task<List<Mission>> GetAllMissionAsync()
         {
-            return await this._dbContext.Missions.Include(m => m.Client).ToListAsync();
+            return await this._dbContext.Missions.Include(m => m.Client).Include(m => m.Consultants).ToListAsync();
         }
 
         public async Task<Mission?> GetMissionByIdAsync(Guid id)
         {
-            return await this._dbContext.Missions.Include(m => m.Client).FirstOrDefaultAsync(m => m.Id == id);
+            return await this._dbContext.Missions.Include(m => m.Client).Include(m => m.Consultants).FirstOrDefaultAsync(m => m.Id == id);
         }
 
         public async Task<Guid> UpdateMissionAsync(MissionDto missionDto)
@@ -68,6 +77,25 @@ namespace ConsulTech.Core.Services
             foundMission.Fin = missionDto.Fin;
             foundMission.Budget = missionDto.Budget;
             foundMission.ClientId = missionDto.ClientId;
+
+            if (missionDto.ConsultantIds is not null)
+            {
+                await _dbContext.Entry(foundMission)
+                    .Collection(m => m.Consultants)
+                    .LoadAsync();
+
+                foundMission.Consultants.Clear();
+
+                if (missionDto.ConsultantIds.Count > 0)
+                {
+                    var consultants = await _dbContext.Consultants
+                        .Where(c => missionDto.ConsultantIds.Contains(c.Id))
+                        .ToListAsync();
+
+                    foreach (var c in consultants)
+                        foundMission.Consultants.Add(c);
+                }
+            }
 
             this._dbContext.Missions.Update(foundMission);
             await this._dbContext.SaveChangesAsync();

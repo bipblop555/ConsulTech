@@ -23,5 +23,18 @@ namespace ConsulTech.Core.Context
         {
             optionsBuilder.UseSqlServer("Server=localhost;Database=ConsultTech;TrustServerCertificate=True;Trusted_Connection=True;");
         }
+
+        protected override void OnModelCreating(ModelBuilder b)
+        {
+            base.OnModelCreating(b);
+
+            b.Entity<Mission>()
+                .HasMany(m => m.Consultants)
+                .WithMany(c => c.Missions)
+                .UsingEntity<Dictionary<string, object>>(
+                    "MissionConsultant",
+                    j => j.HasOne<Consultant>().WithMany().HasForeignKey("ConsultantId"),
+                    j => j.HasOne<Mission>().WithMany().HasForeignKey("MissionId"));
+        }
     }
 }

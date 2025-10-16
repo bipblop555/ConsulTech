@@ -20,7 +20,7 @@ namespace ConsulTech.Api.Controllers
         public record MissionOutput(
             Guid Id, string Titre, string Description,
             DateTime Debut, DateTime Fin, float Budget,
-            Guid ClientId, string ClientNom
+            Guid ClientId, string ClientNom, List<Guid> ConsultantIds, List<string> Consultants
         );
 
         [HttpGet]
@@ -35,7 +35,9 @@ namespace ConsulTech.Api.Controllers
                 m.Fin,
                 m.Budget,
                 m.ClientId,
-                m.Client?.Nom ?? "-"
+                m.Client?.Nom ?? "-",
+                m.Consultants.Select(c => c.Id).ToList(),
+                m.Consultants.Select(c => $"{c.Prenom} {c.Nom}").ToList()
             ));
             return Ok(output);
         }
@@ -54,7 +56,9 @@ namespace ConsulTech.Api.Controllers
                 m.Fin,
                 m.Budget,
                 m.ClientId,
-                m.Client?.Nom ?? "-"
+                m.Client?.Nom ?? "-",
+                m.Consultants.Select(c => c.Id).ToList(),
+                m.Consultants.Select(c => $"{c.Prenom} {c.Nom}").ToList()
             );
             return Ok(dto);
         }
@@ -69,7 +73,8 @@ namespace ConsulTech.Api.Controllers
                 Debut = mission.Debut,
                 Fin = mission.Fin,
                 Budget = mission.Budget,
-                ClientId = mission.ClientId
+                ClientId = mission.ClientId,
+                ConsultantIds = mission.ConsultantIds
             });
 
             return createdMissionId != Guid.Empty ? Created($"/api/mission/{createdMissionId}", null) : Problem();
@@ -89,7 +94,8 @@ namespace ConsulTech.Api.Controllers
                 Debut = mission.Debut,
                 Fin = mission.Fin,
                 Budget = mission.Budget,
-                ClientId = mission.ClientId
+                ClientId = mission.ClientId,
+                ConsultantIds = mission.ConsultantIds
             });
 
             return updatedMissionId != Guid.Empty ? NoContent() : Problem();

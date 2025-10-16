@@ -6,15 +6,24 @@
         public MissionsClient(HttpClient http) => _http = http;
 
         // DTO => API
-        public record MissionDto(Guid Id, string Titre, string Description,
+        public record MissionDto(
+            Guid Id, string Titre, string Description,
             DateTime Debut, DateTime Fin, float Budget,
-            Guid ClientId, string ClientNom);
+            Guid ClientId, string ClientNom,
+            List<Guid>? ConsultantIds, List<string>? Consultants
+        );
 
-        public record CreateMissionDto(string Titre, string Description,
-            DateTime Debut, DateTime Fin, float Budget, Guid ClientId);
+        public record CreateMissionDto(
+            string Titre, string Description,
+            DateTime Debut, DateTime Fin, float Budget, Guid ClientId,
+            List<Guid> ConsultantIds
+        );
 
-        public record UpdateMissionDto(Guid Id, string Titre, string Description,
-            DateTime Debut, DateTime Fin, float Budget, Guid ClientId);
+        public record UpdateMissionDto(
+            Guid Id, string Titre, string Description,
+            DateTime Debut, DateTime Fin, float Budget, Guid ClientId,
+            List<Guid> ConsultantIds
+        );
 
         public async Task<List<MissionDto>> GetAll()
             => await _http.GetFromJsonAsync<List<MissionDto>>("api/mission") ?? new();

@@ -9,5 +9,7 @@
         public DateTime Fin { get; set; }
         public float Budget { get; set; }
         public string ClientNom { get; set; } = "";
+        public List<string>? Consultants { get; set; }
+        public int? ConsultantsCount { get; set; }
     }
 }

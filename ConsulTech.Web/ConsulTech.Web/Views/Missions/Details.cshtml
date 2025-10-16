@@ -16,6 +16,21 @@
             <dd class="col-sm-9">@Model.Fin.ToShortDateString()</dd>
             <dt class="col-sm-3">Budget</dt>
             <dd class="col-sm-9">@Model.Budget.ToString("N2")</dd>
+            <dt class="col-sm-3">Consultants</dt>
+            <dd class="col-sm-9">
+                @if (Model.Consultants != null && Model.Consultants.Any())
+                {
+                    @string.Join(", ", Model.Consultants)
+                }
+                else if ((Model.ConsultantsCount ?? 0) > 0)
+                {
+                    @($"{Model.ConsultantsCount} consultant(s)")
+                }
+                else
+                {
+                    <span class="text-muted">Aucun consultant</span>
+                }
+            </dd>
             <dt class="col-sm-3">Description</dt>
             <dd class="col-sm-9">@Model.Description</dd>
         </dl>

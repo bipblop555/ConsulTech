@@ -8,11 +8,13 @@ namespace ConsulTech.Web.Controllers
     {
         private readonly MissionsClient _missions;
         private readonly ClientsClient _clients;
+        private readonly ConsultantsClient _consultants;
 
-        public MissionsController(MissionsClient missions, ClientsClient clients)
+        public MissionsController(MissionsClient missions, ClientsClient clients, ConsultantsClient consultants)
         {
             _missions = missions;
             _clients = clients;
+            _consultants = consultants;
         }
 
         // GET /Mission
@@ -24,6 +26,8 @@ namespace ConsulTech.Web.Controllers
                 Id = m.Id, Titre = m.Titre, Description = m.Description,
                 Debut = m.Debut, Fin = m.Fin, Budget = m.Budget,
                 ClientNom = m.ClientNom,
+                Consultants = m.Consultants,
+                ConsultantsCount = m.ConsultantIds?.Count
             }).ToList();
 
             return View(vm);
@@ -34,10 +38,14 @@ namespace ConsulTech.Web.Controllers
         public async Task<IActionResult> Create()
         {
             var clients = await _clients.GetAll(); // déjà existant côté Web
+            var consultants = await _consultants.GetAll();
             var vm = new MissionEditVm
             {
                 ClientOptions = clients
                     .Select(c => (c.Id.ToString(), $"{c.Nom} ({c.Secteur})"))
+                    .ToList(),
+                ConsultantOptions = consultants
+                    .Select(c => (c.Id.ToString(), $"{c.Prenom} {c.Nom}"))
                     .ToList()
             };
             return View(vm);
@@ -51,13 +59,17 @@ namespace ConsulTech.Web.Controllers
             if (!ModelState.IsValid)
             {
                 var clients = await _clients.GetAll();
+                var consultants = await _consultants.GetAll();
                 vm.ClientOptions = clients
                     .Select(c => (c.Id.ToString(), $"{c.Nom} ({c.Secteur})"))
+                    .ToList();
+                vm.ConsultantOptions = consultants
+                    .Select(c => (c.Id.ToString(), $"{c.Prenom} {c.Nom}"))
                     .ToList();
                 return View(vm);
             }
             await _missions.Create(new MissionsClient.CreateMissionDto(
-                vm.Titre, vm.Description, vm.Debut, vm.Fin, vm.Budget, vm.ClientId));
+                vm.Titre, vm.Description, vm.Debut, vm.Fin, vm.Budget, vm.ClientId, vm.ConsultantIds));
 
             return RedirectToAction(nameof(Index));
         }
@@ -70,6 +82,7 @@ namespace ConsulTech.Web.Controllers
             if (m is null) return NotFound();
 
             var clients = await _clients.GetAll();
+            var consultants = await _consultants.GetAll();
             var vm = new MissionEditVm
             {
                 Titre = m.Titre,
@@ -78,7 +91,11 @@ namespace ConsulTech.Web.Controllers
                 Fin = m.Fin,
                 Budget = m.Budget,
                 ClientId = m.ClientId,
-                ClientOptions = clients.Select(c => (c.Id.ToString(), $"{c.Nom} ({c.Secteur})")).ToList()
+                ClientOptions = clients.Select(c => (c.Id.ToString(), $"{c.Nom} ({c.Secteur})")).ToList(),
+                ConsultantOptions = consultants
+                    .Select(c => (c.Id.ToString(), $"{c.Prenom} {c.Nom}"))
+                    .ToList(),
+                ConsultantIds = m.ConsultantIds ?? new()
             };
             ViewBag.MissionId = m.Id;
             return View(vm);
@@ -92,18 +109,26 @@ namespace ConsulTech.Web.Controllers
             if (!ModelState.IsValid)
             {
                 var clients = await _clients.GetAll();
+                var consultants = await _consultants.GetAll();
                 vm.ClientOptions = clients.Select(c => (c.Id.ToString(), $"{c.Nom} ({c.Secteur})")).ToList();
+                vm.ConsultantOptions = consultants
+                    .Select(c => (c.Id.ToString(), $"{c.Prenom} {c.Nom}"))
+                    .ToList();
                 return View(vm);
             }
 
             var ok = await _missions.Update(new MissionsClient.UpdateMissionDto(
-                id, vm.Titre, vm.Description, vm.Debut, vm.Fin, vm.Budget, vm.ClientId));
+                id, vm.Titre, vm.Description, vm.Debut, vm.Fin, vm.Budget, vm.ClientId, vm.ConsultantIds));
 
             if (!ok)
             {
                 ModelState.AddModelError(string.Empty, "Mise à jour impossbile (API ?)");
                 var clients = await _clients.GetAll();
+                var consultants = await _consultants.GetAll();
                 vm.ClientOptions = clients.Select(c => (c.Id.ToString(), $"{c.Nom} ({c.Secteur})")).ToList();
+                vm.ConsultantOptions = consultants
+                    .Select(c => (c.Id.ToString(), $"{c.Prenom} {c.Nom}"))
+                    .ToList();
                 return View(vm);
             }
             return RedirectToAction(nameof(Index));
@@ -135,7 +160,9 @@ namespace ConsulTech.Web.Controllers
                 Debut = m.Debut,
                 Fin = m.Fin,
                 Budget = m.Budget,
-                ClientNom = m.ClientNom
+                ClientNom = m.ClientNom,
+                Consultants = m.Consultants,
+                ConsultantsCount = m.ConsultantIds?.Count
             };
             return View(vm);
         }

@@ -29,5 +29,5 @@ public sealed class Consultant : IEntities
     public bool EstDisponible { get; set; }
 
     public List<Competence> Competences { get; set; } = null!;
-    public List<Mission> Missions { get; set; } = null!;
+    public List<Mission> Missions { get; set; } = new();
 }

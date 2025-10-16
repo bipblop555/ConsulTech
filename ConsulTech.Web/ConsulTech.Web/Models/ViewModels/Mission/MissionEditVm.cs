@@ -19,5 +19,8 @@ namespace ConsulTech.Web.Models.ViewModels.Mission
         [Required] public Guid ClientId { get; set; }
 
         public List<(string Value, string Label)> ClientOptions { get; set; } = new();
+
+        public List<(string Value, string Label)> ConsultantOptions { get; set; } = new();
+        public List<Guid> ConsultantIds { get; set; } = new();
     }
 }

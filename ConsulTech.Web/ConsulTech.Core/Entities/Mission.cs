@@ -30,4 +30,5 @@ public sealed class Mission : ICategorie
 
     public Guid ClientId { get; set; }
     public Client Client { get; set; } = null!;
+    public ICollection<Consultant> Consultants { get; set; } = new List<Consultant>();
 }

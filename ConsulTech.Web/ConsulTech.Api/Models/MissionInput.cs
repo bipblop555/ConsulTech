@@ -24,5 +24,6 @@ namespace ConsulTech.Api.Models
         [Range(0, float.MaxValue, ErrorMessage = "Le budget doit être un nombre positif.")]
         public float Budget { get; set; }
         public Guid ClientId { get; set; }
+        public List<Guid> ConsultantIds { get; set; } = new();
     }
 }

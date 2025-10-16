@@ -27,6 +27,7 @@ else
                     <th>Début</th>
                     <th>Fin</th>
                     <th class="text-end">Budget</th>
+                    <th>Consultants</th>
                     <th class="text-end">Actions</th>
                 </tr>
             </thead>
@@ -39,6 +40,13 @@ else
                         <td>@m.Debut.ToShortDateString()</td>
                         <td>@m.Fin.ToShortDateString()</td>
                         <td class="text-end">@m.Budget.ToString("N2")</td>
+                        <td>
+                            @(
+                              m.Consultants != null && m.Consultants.Any()
+                              ? string.Join(", ", m.Consultants)
+                              : (m.ConsultantsCount ?? 0).ToString()
+                             )
+                        </td>
                         <td class="text-end">
                             <a class="btn btn-sm btn-outline-secondary"
                                asp-controller="Missions"
