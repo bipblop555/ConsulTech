@@ -77,9 +77,35 @@ Cette approche garantit une **séparation claire des responsabilités**, une **�
 ### 1. Cloner le dépôt
 ```bash
 git clone https://github.com/bipblop555/ConsulTech.git
-
-dotnet ef database update -p .\ConsulTech.Core\ -s .\ConsulTech.Api
-
 ```
 
 Créer une nouvelle propriété de démarrage multiple pour lancer l'API ainsi que le WEB simultanément
+
+## 🗄️ Base de données (SQL Server)
+
+### 🧩 Schéma général
+
+Le projet utilise **Microsoft SQL Server** comme base de données principale.
+
+Voici les tables et leurs relations principales :
+
+- **Categories** : Liste des catégories de compétences (ex. Développement, Infrastructure…)
+- **Niveaux** : Définit le niveau de maîtrise d’une compétence (Débutant, Intermédiaire, Expert…)
+- **Competences** : Compétences techniques ou fonctionnelles (liées à une catégorie et un niveau)
+- **Consultants** : Employés du cabinet (avec leur statut et date d’embauche)
+- **CompetenceConsultant** : Table d’association entre les consultants et leurs compétences
+- **Clients** : Entreprises clientes du cabinet
+- **Missions** : Projets réalisés pour les clients (liés à un client et éventuellement un consultant)
+
+Modifiez la phrase de connection selon vos besoins
+
+```cs
+builder.Services.AddDbContext<ConsultTechContext>(
+    options => options.UseSqlServer(builder.Configuration.GetConnectionString("ConsultTechDbContext")));
+```
+La database, ainsi que les tables sont générés en **Code First** au lancement de la commande dotnet ef ci-dessous.
+Une fois à la racine du projet lancez cette commande afin de créer la database et les tables.
+
+```bash
+dotnet ef database update -p .\ConsulTech.Core\ -s .\ConsulTech.Api
+```
