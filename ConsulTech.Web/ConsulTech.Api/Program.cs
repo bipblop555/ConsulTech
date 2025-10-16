@@ -6,6 +6,16 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowDashboard", policy =>
+    {
+        policy.WithOrigins("https://localhost:7298", "http://localhost:5062") // Ajoutez l'origine de votre front-end
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+});
+
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddDbContext<ConsultTechContext>(
@@ -14,6 +24,7 @@ builder.Services.AddOpenApi();
 builder.Services.AddCoreServices();
 
 var app = builder.Build();
+app.UseCors("AllowDashboard");
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
